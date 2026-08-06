@@ -2,21 +2,22 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { NavItem } from "@/lib/nav-config";
 import { getProductByHandle } from "@/lib/shopify/products";
 import { formatMoney } from "@/lib/shopify/format";
 
 export function MegaMenu({ item, onNavigate }: { item: NavItem; onNavigate: () => void }) {
+  const shouldReduceMotion = useReducedMotion();
   if (!item.columns) return null;
   const featured = (item.featuredHandles ?? []).map(getProductByHandle).filter(Boolean);
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -8 }}
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : -8 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
+      exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -8 }}
+      transition={{ duration: shouldReduceMotion ? 0 : 0.18, ease: "easeOut" }}
       className="absolute inset-x-0 top-full bg-cream-card border-b border-cream-line shadow-lg z-30"
     >
       <div className="mx-auto max-w-[1240px] px-6 py-8 grid grid-cols-[1fr_1fr_1fr_1fr_1.1fr] gap-8">

@@ -53,17 +53,17 @@ export function Header() {
       <AnnouncementBar />
       <div className="relative">
         <div className="mx-auto max-w-[1240px] px-6 h-20 grid grid-cols-3 items-center">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center -ml-2.5">
             <button
               onClick={() => setMobileOpen(true)}
-              className="lg:hidden p-2 -ml-2"
+              className="lg:hidden size-11 flex items-center justify-center"
               aria-label="Ouvrir le menu"
             >
               <Menu className="size-5" />
             </button>
             <button
               onClick={() => setSearchOpen((v) => !v)}
-              className="hidden lg:flex p-2 -ml-2"
+              className="hidden lg:flex size-11 items-center justify-center"
               aria-label="Rechercher"
               aria-expanded={searchOpen}
             >
@@ -75,17 +75,17 @@ export function Header() {
             <Image src="/images/logo-nayuma.svg" alt="NAYUMA — Tea & Mood" width={200} height={65} priority className="h-12 md:h-14 w-auto" />
           </Link>
 
-          <div className="flex items-center justify-end gap-1">
-            <button onClick={() => setSearchOpen((v) => !v)} className="lg:hidden p-2" aria-label="Rechercher">
+          <div className="flex items-center justify-end -mr-2.5">
+            <button onClick={() => setSearchOpen((v) => !v)} className="lg:hidden size-11 flex items-center justify-center" aria-label="Rechercher">
               <Search className="size-5" />
             </button>
-            <Link href="/compte" className="hidden sm:flex p-2" aria-label="Mon compte">
+            <Link href="/compte" className="hidden sm:flex size-11 items-center justify-center" aria-label="Mon compte">
               <User className="size-5" />
             </Link>
-            <button onClick={openCart} className="relative p-2" aria-label="Voir le panier">
+            <button onClick={openCart} className="relative size-11 flex items-center justify-center" aria-label="Voir le panier">
               <ShoppingBag className="size-5" />
               {totalQuantity > 0 && (
-                <span className="absolute top-0 right-0 flex size-4 items-center justify-center rounded-full bg-terracotta text-cream text-[10px]">
+                <span className="absolute top-1.5 right-1.5 flex size-4 items-center justify-center rounded-full bg-terracotta text-cream text-[10px]">
                   {totalQuantity}
                 </span>
               )}

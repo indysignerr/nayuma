@@ -22,7 +22,7 @@ export function FineTeaSection() {
           </div>
           <Link
             href="/fine-tea"
-            className="inline-flex items-center gap-2 shrink-0 text-sm font-medium border border-gold text-gold-dark rounded-sm px-5 py-3 hover:bg-gold hover:text-cream transition-colors"
+            className="inline-flex items-center gap-2 shrink-0 text-sm font-medium border border-gold text-gold-dark rounded-sm px-5 py-3 hover:bg-gold hover:text-ink transition-colors"
           >
             Découvrir la sélection FINE TEA <ArrowRight className="size-4" />
           </Link>

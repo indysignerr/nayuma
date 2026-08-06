@@ -37,7 +37,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
               addLine(product, defaultVariant);
             }}
             aria-label={`Ajouter ${product.title} au panier`}
-            className="absolute bottom-3 right-3 z-10 flex size-10 items-center justify-center rounded-full bg-ink text-cream opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 focus-visible:opacity-100 focus-visible:translate-y-0 hover:bg-gold-dark"
+            className="absolute bottom-3 right-3 z-10 flex size-11 items-center justify-center rounded-full bg-ink text-cream transition-all duration-300 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 focus-visible:opacity-100 focus-visible:translate-y-0 hover:bg-gold-dark"
           >
             <Plus className="size-4" />
           </button>

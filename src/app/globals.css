@@ -125,10 +125,6 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   font-family: var(--font-body);
 }
@@ -158,6 +154,39 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+.prose {
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--color-ink-soft);
+}
+.prose h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--color-ink);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+.prose p {
+  margin-bottom: 1rem;
+}
+.prose ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+.prose li {
+  margin-bottom: 0.375rem;
+}
+.prose a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
 .mesh-gradient {
   background-image:
     radial-gradient(ellipse 80% 60% at 15% 0%, rgba(171, 138, 77, 0.14), transparent 60%),
@@ -166,9 +195,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   *,
   *::before,
   *::after {

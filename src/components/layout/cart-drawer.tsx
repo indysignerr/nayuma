@@ -42,7 +42,7 @@ export function CartDrawer() {
           </p>
           <div className="h-1.5 w-full rounded-full bg-cream-deep overflow-hidden">
             <div
-              className="h-full bg-gold transition-all duration-500"
+              className="h-full bg-gold-dark transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>

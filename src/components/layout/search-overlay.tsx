@@ -4,12 +4,13 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { X, Search } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { getAllProducts } from "@/lib/shopify/products";
 import { formatMoney } from "@/lib/shopify/format";
 
 export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [query, setQuery] = useState("");
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     if (!open) setQuery("");
@@ -35,10 +36,10 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
     <AnimatePresence>
       {open && (
         <motion.div
-          initial={{ opacity: 0, y: -12 }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : -12 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -12 }}
-          transition={{ duration: 0.2 }}
+          exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -12 }}
+          transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
           className="absolute inset-x-0 top-full bg-cream-card border-b border-cream-line shadow-lg z-40"
         >
           <div className="mx-auto max-w-[1240px] px-6 py-6">
@@ -49,7 +50,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Rechercher un thé, une infusion, un coffret…"
-                className="flex-1 bg-transparent outline-none font-display text-xl placeholder:text-ink-soft/60"
+                className="flex-1 bg-transparent font-display text-xl placeholder:text-ink-soft/60 outline-none focus-visible:ring-0 rounded-sm focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2"
               />
               <button onClick={onClose} aria-label="Fermer la recherche" className="text-ink-soft hover:text-ink">
                 <X className="size-5" />
