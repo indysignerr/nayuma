@@ -1,26 +1,180 @@
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-cream: #f6f0e3;
+  --color-cream-card: #fffaf0;
+  --color-cream-deep: #efe4cf;
+  --color-cream-line: #e4d6b8;
+  --color-ink: #18140d;
+  --color-ink-soft: #3a3327;
+  --color-gold: #ab8a4d;
+  --color-gold-light: #d7bd85;
+  --color-gold-dark: #7c6236;
+  --color-terracotta: #a63f2e;
+
+  --color-tea-green: #8a9a5c;
+  --color-tea-black: #a9682a;
+  --color-tea-rooibos: #bd5a3f;
+  --color-tea-white: #cdb15f;
+  --color-tea-matcha: #3f7a5d;
+  --color-tea-chai: #9c5a33;
+  --color-tea-wellness: #6f8f7a;
+
+  --font-display: var(--font-cormorant);
+  --font-body: var(--font-work-sans);
+
+  /* shadcn/ui tokens, remapped to the NAYUMA palette */
+  --background: var(--color-cream);
+  --foreground: var(--color-ink);
+  --card: var(--color-cream-card);
+  --card-foreground: var(--color-ink);
+  --popover: var(--color-cream-card);
+  --popover-foreground: var(--color-ink);
+  --primary: var(--color-ink);
+  --primary-foreground: var(--color-cream);
+  --secondary: var(--color-cream-deep);
+  --secondary-foreground: var(--color-ink);
+  --muted: var(--color-cream-deep);
+  --muted-foreground: var(--color-ink-soft);
+  --accent: var(--color-gold-light);
+  --accent-foreground: var(--color-ink);
+  --destructive: var(--color-terracotta);
+  --border: var(--color-cream-line);
+  --input: var(--color-cream-line);
+  --ring: var(--color-gold);
+  --radius: 0.25rem;
 }
 
 @theme inline {
+  --color-cream: var(--color-cream);
+  --color-cream-card: var(--color-cream-card);
+  --color-cream-deep: var(--color-cream-deep);
+  --color-cream-line: var(--color-cream-line);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-gold: var(--color-gold);
+  --color-gold-light: var(--color-gold-light);
+  --color-gold-dark: var(--color-gold-dark);
+  --color-terracotta: var(--color-terracotta);
+
+  --color-tea-green: var(--color-tea-green);
+  --color-tea-black: var(--color-tea-black);
+  --color-tea-rooibos: var(--color-tea-rooibos);
+  --color-tea-white: var(--color-tea-white);
+  --color-tea-matcha: var(--color-tea-matcha);
+  --color-tea-chai: var(--color-tea-chai);
+  --color-tea-wellness: var(--color-tea-wellness);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in: fade-in 0.6s ease-out forwards;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 }
 
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: var(--color-gold-light);
+  color: var(--color-ink);
+}
+
+.grain-overlay {
+  position: relative;
+  isolation: isolate;
+}
+
+.grain-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.mesh-gradient {
+  background-image:
+    radial-gradient(ellipse 80% 60% at 15% 0%, rgba(171, 138, 77, 0.14), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 20%, rgba(63, 122, 93, 0.1), transparent 55%),
+    radial-gradient(ellipse 70% 60% at 50% 100%, rgba(189, 90, 63, 0.08), transparent 60%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

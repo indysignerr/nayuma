@@ -1,0 +1,7 @@
+<svg viewBox="0 0 620 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="nayumaTitle">
+  <title id="nayumaTitle">NAYUMA — Tea &amp; Mood</title>
+  <text x="310" y="108" text-anchor="middle" font-family="'Cormorant Garamond', 'Times New Roman', serif" font-size="84" letter-spacing="14" fill="currentColor">NAYUMA</text>
+  <line x1="70" y1="150" x2="228" y2="150" stroke="currentColor" stroke-width="1"/>
+  <text x="310" y="160" text-anchor="middle" font-family="'Cormorant Garamond', 'Times New Roman', serif" font-size="30" letter-spacing="3" fill="currentColor">Tea &amp; Mood</text>
+  <line x1="392" y1="150" x2="550" y2="150" stroke="currentColor" stroke-width="1"/>
+</svg>
