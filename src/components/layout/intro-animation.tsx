@@ -82,7 +82,7 @@ export function IntroAnimation() {
       className="fixed inset-0 z-[100] flex items-center justify-center bg-ink opacity-0"
     >
       <div className="flex flex-col items-center">
-        <svg width="96" height="96" viewBox="0 0 96 96" fill="none">
+        <svg className="w-40 h-40 md:w-56 md:h-56" viewBox="0 0 96 96" fill="none">
           <path
             ref={(el) => {
               steamRefs.current[0] = el;
@@ -127,9 +127,9 @@ export function IntroAnimation() {
             <line x1="20" y1="76" x2="76" y2="76" stroke="#f6f0e3" strokeWidth="2" strokeLinecap="round" />
           </g>
         </svg>
-        <div ref={wordmarkRef} className="mt-5 text-center opacity-0">
-          <p className="font-display text-2xl tracking-[0.15em] text-cream">NAYUMA</p>
-          <p className="text-[10px] tracking-[0.3em] text-cream/60 uppercase mt-1">Tea &amp; Mood</p>
+        <div ref={wordmarkRef} className="mt-8 md:mt-10 text-center opacity-0">
+          <p className="font-display text-4xl md:text-5xl tracking-[0.15em] text-cream">NAYUMA</p>
+          <p className="text-xs md:text-sm tracking-[0.35em] text-cream/60 uppercase mt-2">Tea &amp; Mood</p>
         </div>
       </div>
     </div>
