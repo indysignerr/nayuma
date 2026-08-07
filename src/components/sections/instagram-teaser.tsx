@@ -12,13 +12,13 @@ export function InstagramTeaser() {
             <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
           </svg>
           <p className="font-display text-2xl">
-            Suivez-nous <span className="text-gold-dark">@nayumatea</span>
+            Suivez-nous <span className="text-gold-dark">@nayuma_tea</span>
           </p>
           <p className="text-sm text-ink-soft max-w-md">
             Nos dernières récoltes, rituels et coulisses de la maison sont à retrouver chaque semaine sur Instagram.
           </p>
           <Link
-            href="https://www.instagram.com/nayumatea"
+            href="https://www.instagram.com/nayuma_tea/"
             target="_blank"
             rel="noreferrer"
             className="text-sm font-medium underline underline-offset-4 hover:text-gold-dark transition-colors"

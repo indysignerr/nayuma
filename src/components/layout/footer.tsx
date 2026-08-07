@@ -54,7 +54,7 @@ export function Footer() {
             </p>
             <div className="flex items-center gap-4 mt-6 text-sm">
               <a
-                href="https://www.instagram.com/nayumatea"
+                href="https://www.instagram.com/nayuma_tea/"
                 target="_blank"
                 rel="noreferrer"
                 className="hover:text-gold-light transition-colors underline underline-offset-4"
