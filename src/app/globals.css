@@ -11,15 +11,17 @@
   --color-gold: #ab8a4d;
   --color-gold-light: #d7bd85;
   --color-gold-dark: #7c6236;
-  --color-terracotta: #a63f2e;
+  --color-terracotta: #8b4a34;
 
-  --color-tea-green: #8a9a5c;
-  --color-tea-black: #a9682a;
-  --color-tea-rooibos: #bd5a3f;
-  --color-tea-white: #cdb15f;
-  --color-tea-matcha: #3f7a5d;
-  --color-tea-chai: #9c5a33;
-  --color-tea-wellness: #6f8f7a;
+  --color-tone-rose: #d9a5a0;
+  --color-tone-terracotta: var(--color-terracotta);
+  --color-tone-sauge: #8a9a7e;
+  --color-tone-brun: #4a342a;
+  --color-tone-creme: #e8dcc8;
+  --color-tone-taupe: #8c8378;
+  --color-tone-cuivre: #b5713f;
+  --color-tone-or: #c9a24b;
+  --color-tone-vert-fonce: #3f5c4a;
 
   --font-display: var(--font-cormorant);
   --font-body: var(--font-work-sans);
@@ -58,13 +60,15 @@
   --color-gold-dark: var(--color-gold-dark);
   --color-terracotta: var(--color-terracotta);
 
-  --color-tea-green: var(--color-tea-green);
-  --color-tea-black: var(--color-tea-black);
-  --color-tea-rooibos: var(--color-tea-rooibos);
-  --color-tea-white: var(--color-tea-white);
-  --color-tea-matcha: var(--color-tea-matcha);
-  --color-tea-chai: var(--color-tea-chai);
-  --color-tea-wellness: var(--color-tea-wellness);
+  --color-tone-rose: var(--color-tone-rose);
+  --color-tone-terracotta: var(--color-tone-terracotta);
+  --color-tone-sauge: var(--color-tone-sauge);
+  --color-tone-brun: var(--color-tone-brun);
+  --color-tone-creme: var(--color-tone-creme);
+  --color-tone-taupe: var(--color-tone-taupe);
+  --color-tone-cuivre: var(--color-tone-cuivre);
+  --color-tone-or: var(--color-tone-or);
+  --color-tone-vert-fonce: var(--color-tone-vert-fonce);
 
   --font-display: var(--font-display);
   --font-body: var(--font-body);

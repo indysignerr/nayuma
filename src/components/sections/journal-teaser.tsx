@@ -10,7 +10,7 @@ export function JournalTeaser() {
   return (
     <section className="mx-auto max-w-[1240px] px-6 py-16 md:py-20 border-t border-cream-line">
       <ScrollReveal className="flex items-end justify-between mb-8">
-        <h2 className="font-display text-3xl md:text-4xl">Le journal du thé</h2>
+        <h2 className="font-display text-3xl md:text-4xl">Le journal NAYUMA</h2>
         <Link href="/journal" className="hidden sm:inline-flex items-center gap-1.5 text-sm hover:text-gold-dark transition-colors">
           Tous les articles <ArrowRight className="size-4" />
         </Link>

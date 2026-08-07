@@ -37,7 +37,7 @@ export function CartDrawer() {
                 livraison offerte
               </>
             ) : (
-              <span className="text-tea-green font-medium">Livraison offerte débloquée ✓</span>
+              <span className="text-tone-sauge font-medium">Livraison offerte débloquée ✓</span>
             )}
           </p>
           <div className="h-1.5 w-full rounded-full bg-cream-deep overflow-hidden">
@@ -69,7 +69,7 @@ export function CartDrawer() {
                         <X className="size-4" />
                       </button>
                     </div>
-                    <p className="text-xs text-ink-soft mt-0.5">{line.weight}</p>
+                    <p className="text-xs text-ink-soft mt-0.5">{line.format}</p>
                     <div className="flex items-center justify-between mt-2">
                       <div className="flex items-center gap-1 border border-cream-line rounded">
                         <button

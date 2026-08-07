@@ -4,15 +4,15 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 const TESTIMONIALS = [
   {
     name: "Camille R.",
-    text: "Le Gyokuro Impérial est d'une finesse rare. On sent vraiment la différence avec les grandes surfaces.",
+    text: "Le Rituel Chute & Fortification a changé la donne après ma grossesse. Densité retrouvée en deux mois.",
   },
   {
-    name: "Thomas L.",
-    text: "Les échantillons offerts m'ont fait découvrir le rooibos vanille, devenu mon rituel du soir.",
+    name: "Léa M.",
+    text: "Le Rituel Douce Lune est devenu mon réflexe pendant mes cycles. Simple, efficace, sans chichi.",
   },
   {
-    name: "Sophie M.",
-    text: "Coffret FINE TEA offert à ma mère : l'emballage et la qualité sont dignes d'une vraie maison de thé.",
+    name: "Sophie B.",
+    text: "Offert à ma sœur : l'emballage et la qualité sont dignes d'une vraie maison de bien-être.",
   },
 ];
 

@@ -1,35 +1,36 @@
 import { productSpecs as rawProductSpecs } from "./product-specs.mjs";
-import { NOTE_LABELS, ORIGIN_LABELS } from "./collections";
 import type {
   Product,
   WeightVariant,
   Preparation,
   Money,
-  Universe,
-  TeaType,
-  AromaticNote,
-  Origin,
-  Need,
-  Selection,
-  AccessoryType,
+  ProductCategory,
+  RitualLine,
+  HairNeed,
+  FeminineNeed,
   Accent,
 } from "./types";
 
 type ProductSpec = {
   handle: string;
   title: string;
-  universe: Universe;
-  type?: TeaType;
-  origin?: Origin;
-  notes: AromaticNote[];
-  need: Need[];
-  selections: Selection[];
-  accessoryType?: AccessoryType;
-  fineTea: boolean;
+  category: ProductCategory;
+  line?: RitualLine;
+  hairNeeds: HairNeed[];
+  feminineNeeds: FeminineNeed[];
   accent: Accent;
-  basePrice100: number;
-  flatPrice?: boolean;
+  basePrice: number;
+  actifs: string;
+  flatFormat?: string;
+  featured?: boolean;
 };
+
+const FEATURED_HANDLES = [
+  "rituel-chute-fortification",
+  "rituel-douce-lune",
+  "rituel-densite-volume",
+  "rituel-harmonie",
+];
 
 const productSpecs = rawProductSpecs as ProductSpec[];
 
@@ -37,59 +38,57 @@ function money(amount: number): Money {
   return { amount: amount.toFixed(2), currencyCode: "EUR" };
 }
 
-function preparationFor(universe: string, type?: string): Preparation | undefined {
-  switch (type) {
-    case "vert":
-      return { temperatureC: 75, minutesMin: 2, minutesMax: 3, advice: "Une eau trop chaude brûle les feuilles et amérit l'infusion." };
-    case "blanc":
-      return { temperatureC: 75, minutesMin: 4, minutesMax: 6, advice: "Laissez le temps aux bourgeons de se déployer pleinement." };
-    case "noir":
-      return { temperatureC: 95, minutesMin: 3, minutesMax: 5, advice: "Idéal nature ou avec un nuage de lait." };
-    case "matcha":
-      return { temperatureC: 70, minutesMin: 0, minutesMax: 0, advice: "Fouettez en zigzag jusqu'à l'obtention d'une mousse fine, sans faire bouillir l'eau." };
-  }
-  switch (universe) {
-    case "infusions-rooibos":
-    case "bien-etre-detox":
-      return { temperatureC: 100, minutesMin: 5, minutesMax: 8, advice: "Plus l'infusion est longue, plus les bienfaits se révèlent." };
-    case "chai-latte":
-      return { temperatureC: 95, minutesMin: 4, minutesMax: 5, advice: "Infusez puis allongez avec le lait de votre choix, chaud ou mousseux." };
-    case "thes-glaces":
-      return { temperatureC: 90, minutesMin: 5, minutesMax: 5, advice: "Infusez chaud puis laissez refroidir sur glace, ou optez pour l'infusion à froid (4h au réfrigérateur)." };
-    default:
-      return undefined;
-  }
+function preparationFor(category: ProductCategory): Preparation | undefined {
+  if (category !== "infusion") return undefined;
+  return {
+    temperatureC: 95,
+    minutesMin: 8,
+    minutesMax: 10,
+    advice: "Laissez infuser à couvert pour préserver les principes actifs les plus volatils.",
+  };
 }
 
-function describe(spec: (typeof productSpecs)[number]): { short: string; html: string; composition: string } {
-  const noteWords = spec.notes.map((n: string) => NOTE_LABELS[n]?.toLowerCase()).filter(Boolean);
-  const originPhrase = spec.origin ? `récolté ${spec.origin === "inde" ? "en" : "au"} ${ORIGIN_LABELS[spec.origin]}` : "sélectionné avec soin par notre maison";
-  const noteClause = noteWords.length ? ` aux notes ${noteWords.join(", ")}` : "";
-  const short = `${spec.title}${noteClause ? "," + noteClause : ""}.`;
-  const html = `<p>${spec.title}, ${originPhrase}${noteClause}. Une sélection pensée pour révéler toute la richesse aromatique de la feuille, du jardin jusqu'à votre tasse.</p><p>Chaque lot est goûté et validé par notre atelier avant d'intégrer la collection NAYUMA.</p>`;
-  const composition = spec.universe === "coffrets-accessoires" ? "Voir détail dans le coffret." : `100% ingrédients naturels. ${noteWords.length ? `Arômes naturels de ${noteWords.join(" et ")}.` : ""}`;
-  return { short, html, composition };
+const HAIR_NEED_LABELS: Record<HairNeed, string> = {
+  chute: "anti-chute",
+  densite: "densité",
+  brillance: "brillance",
+  "cuir-chevelu": "cuir chevelu",
+  "anti-stress": "anti-stress",
+  eclat: "éclat",
+};
+
+const FEMININE_NEED_LABELS: Record<FeminineNeed, string> = {
+  cycle: "cycle féminin",
+  premenstruel: "confort prémenstruel",
+  vitalite: "vitalité féminine",
+  intime: "confort intime",
+  hormonal: "équilibre hormonal",
+};
+
+function describe(spec: ProductSpec): { short: string; html: string } {
+  const needLabels = [
+    ...spec.hairNeeds.map((n) => HAIR_NEED_LABELS[n]),
+    ...spec.feminineNeeds.map((n) => FEMININE_NEED_LABELS[n]),
+  ];
+  const purpose = needLabels.length ? needLabels.join(" et ") : "votre rituel bien-être";
+  const short = `${spec.title}, pensé pour ${purpose}.`;
+  const html =
+    spec.category === "infusion"
+      ? `<p>${spec.title} associe ${spec.actifs.toLowerCase()} dans une infusion botanique pensée pour ${purpose}. Un rituel à intégrer chaque jour, en toute simplicité.</p><p>Chaque lot est composé avec soin par notre atelier avant d'intégrer la collection NAYUMA.</p>`
+      : `<p>${spec.title} associe ${spec.actifs.toLowerCase()} pour accompagner ${purpose}. Une formule courte, sans superflu.</p>`;
+  return { short, html };
 }
 
-function buildVariants(spec: (typeof productSpecs)[number]): WeightVariant[] {
-  if ((spec as { flatPrice?: boolean }).flatPrice) {
-    return [
-      {
-        id: `${spec.handle}-unique`,
-        weight: "Unique",
-        sku: `NAY-${spec.handle.toUpperCase()}`,
-        price: money(spec.basePrice100),
-        availableForSale: true,
-      },
-    ];
-  }
-  const p100 = spec.basePrice100;
-  const p500 = Math.round(p100 * 4.3 * 2) / 2 - 0.05;
-  const p1kg = Math.round(p100 * 7.6 * 2) / 2 - 0.05;
+function buildVariants(spec: ProductSpec): WeightVariant[] {
+  const format = spec.flatFormat ?? "80 g";
   return [
-    { id: `${spec.handle}-100g`, weight: "100g", sku: `NAY-${spec.handle.toUpperCase()}-100`, price: money(p100), availableForSale: true },
-    { id: `${spec.handle}-500g`, weight: "500g", sku: `NAY-${spec.handle.toUpperCase()}-500`, price: money(p500), availableForSale: true },
-    { id: `${spec.handle}-1kg`, weight: "1kg", sku: `NAY-${spec.handle.toUpperCase()}-1000`, price: money(p1kg), availableForSale: true },
+    {
+      id: `${spec.handle}-default`,
+      format,
+      sku: `NAY-${spec.handle.toUpperCase()}`,
+      price: money(spec.basePrice),
+      availableForSale: true,
+    },
   ];
 }
 
@@ -102,26 +101,22 @@ function ratingFor(handle: string): { rating: number; reviewCount: number } {
 }
 
 export const PRODUCTS: Product[] = productSpecs.map((spec) => {
-  const { short, html, composition } = describe(spec);
+  const { short, html } = describe(spec);
   const { rating, reviewCount } = ratingFor(spec.handle);
   return {
     id: `gid://nayuma/Product/${spec.handle}`,
     handle: spec.handle,
     title: spec.title,
     vendor: "NAYUMA",
-    universe: spec.universe,
-    type: spec.type,
-    notes: spec.notes,
-    origin: spec.origin,
-    need: spec.need,
-    selections: spec.selections,
-    accessoryType: spec.accessoryType,
-    fineTea: spec.fineTea,
+    category: spec.category,
+    line: spec.line,
+    hairNeeds: spec.hairNeeds,
+    feminineNeeds: spec.feminineNeeds,
     accent: spec.accent,
     shortDescription: short,
     descriptionHtml: html,
-    composition,
-    preparation: preparationFor(spec.universe, spec.type),
+    actifs: spec.actifs,
+    preparation: preparationFor(spec.category),
     images: [
       { url: `/images/products/${spec.handle}.svg`, altText: spec.title },
       { url: `/images/products/${spec.handle}.svg`, altText: `${spec.title} — packaging NAYUMA` },
@@ -140,16 +135,17 @@ export function getProductByHandle(handle: string): Product | undefined {
   return PRODUCTS.find((p) => p.handle === handle);
 }
 
-export function getFineTeaProducts(): Product[] {
-  return PRODUCTS.filter((p) => p.fineTea);
-}
-
 export function getFeaturedProducts(limit = 4): Product[] {
-  return PRODUCTS.filter((p) => p.selections.includes("best-sellers")).slice(0, limit);
+  return FEATURED_HANDLES.map((h) => getProductByHandle(h)).filter((p): p is Product => Boolean(p)).slice(0, limit);
 }
 
 export function getRelatedProducts(product: Product, limit = 4): Product[] {
-  return PRODUCTS.filter(
-    (p) => p.handle !== product.handle && (p.universe === product.universe || p.type === product.type)
-  ).slice(0, limit);
+  return PRODUCTS.filter((p) => {
+    if (p.handle === product.handle) return false;
+    if (p.category !== product.category) return false;
+    if (product.line && p.line === product.line) return true;
+    const sharedHairNeed = p.hairNeeds.some((n) => product.hairNeeds.includes(n));
+    const sharedFeminineNeed = p.feminineNeeds.some((n) => product.feminineNeeds.includes(n));
+    return sharedHairNeed || sharedFeminineNeed;
+  }).slice(0, limit);
 }

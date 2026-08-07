@@ -23,17 +23,17 @@ const workSans = Work_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://nayumatea.com"),
   title: {
-    default: "NAYUMA — Tea & Mood | Thés, Rooibos, Matcha & Infusions d'exception",
+    default: "NAYUMA — Tea & Mood | Infusions capillaires & rituels de bien-être",
     template: "%s | NAYUMA Tea & Mood",
   },
   description:
-    "Découvrez NAYUMA, créateur de thés, rooibos, matcha et infusions d'exception. Sélection FINE TEA, échantillons offerts et livraison gratuite dès 49€.",
+    "Découvrez NAYUMA, infusions botaniques et cosmétiques pensés pour la santé du cheveu et le bien-être féminin. Rituels ciblés, échantillons offerts et livraison gratuite dès 49€.",
   openGraph: {
     type: "website",
     locale: "fr_FR",
     siteName: "NAYUMA Tea & Mood",
     title: "NAYUMA — Tea & Mood",
-    description: "Thés, rooibos, matcha et infusions d'exception. Découvrez la sélection FINE TEA.",
+    description: "Infusions capillaires et rituels de bien-être féminin, formulés avec exigence.",
   },
   icons: {
     icon: [

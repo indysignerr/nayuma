@@ -1,44 +1,32 @@
-import type { Accent } from "@/lib/shopify/types";
+import type { Accent, ProductCategory, RitualLine } from "@/lib/shopify/types";
 
 export const ACCENT_BG: Record<Accent, string> = {
-  green: "bg-tea-green",
-  black: "bg-tea-black",
-  rooibos: "bg-tea-rooibos",
-  white: "bg-tea-white",
-  matcha: "bg-tea-matcha",
-  chai: "bg-tea-chai",
-  wellness: "bg-tea-wellness",
-  gold: "bg-gold",
+  rose: "bg-tone-rose",
+  terracotta: "bg-tone-terracotta",
+  sauge: "bg-tone-sauge",
+  brun: "bg-tone-brun",
+  creme: "bg-tone-creme",
+  taupe: "bg-tone-taupe",
+  cuivre: "bg-tone-cuivre",
+  or: "bg-tone-or",
+  "vert-fonce": "bg-tone-vert-fonce",
 };
 
 export const ACCENT_TEXT: Record<Accent, string> = {
-  green: "text-tea-green",
-  black: "text-tea-black",
-  rooibos: "text-tea-rooibos",
-  white: "text-tea-white",
-  matcha: "text-tea-matcha",
-  chai: "text-tea-chai",
-  wellness: "text-tea-wellness",
-  gold: "text-gold",
+  rose: "text-tone-rose",
+  terracotta: "text-tone-terracotta",
+  sauge: "text-tone-sauge",
+  brun: "text-tone-brun",
+  creme: "text-tone-creme",
+  taupe: "text-tone-taupe",
+  cuivre: "text-tone-cuivre",
+  or: "text-tone-or",
+  "vert-fonce": "text-tone-vert-fonce",
 };
 
-export const UNIVERSE_LABELS: Record<string, string> = {
-  thes: "Thés",
-  "infusions-rooibos": "Infusions & Rooibos",
-  "thes-glaces": "Thés glacés",
-  "chai-latte": "Chai Latté",
-  "bien-etre-detox": "Bien-être & Detox",
-  "coffrets-accessoires": "Coffrets & Accessoires",
-};
-
-export const TYPE_LABELS: Record<string, string> = {
-  vert: "Thé vert",
-  blanc: "Thé blanc",
-  noir: "Thé noir",
-  matcha: "Matcha",
-};
-
-export function categoryLabel(universe: string, type?: string): string {
-  if (type && TYPE_LABELS[type]) return TYPE_LABELS[type];
-  return UNIVERSE_LABELS[universe] ?? universe;
+export function categoryLabel(category: ProductCategory, line?: RitualLine): string {
+  if (category === "cosmetique") return "Cosmétique";
+  if (line === "cheveux") return "Rituel Cheveux";
+  if (line === "feminin") return "Rituel Féminin";
+  return "Infusion";
 }

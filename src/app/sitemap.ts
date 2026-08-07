@@ -9,9 +9,9 @@ const BASE_URL = "https://nayumatea.com";
 
 const STATIC_ROUTES = [
   "",
-  "/fine-tea",
   "/quiz",
-  "/guide-du-the",
+  "/rituels",
+  "/ingredients",
   "/journal",
   "/notre-histoire",
   "/engagement",

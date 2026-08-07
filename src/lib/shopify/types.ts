@@ -8,68 +8,24 @@ export type ShopifyImage = {
   altText: string;
 };
 
-export type Universe =
-  | "thes"
-  | "infusions-rooibos"
-  | "thes-glaces"
-  | "chai-latte"
-  | "bien-etre-detox"
-  | "coffrets-accessoires";
+export type ProductCategory = "infusion" | "cosmetique";
 
-export type TeaType = "vert" | "blanc" | "noir" | "matcha";
+export type RitualLine = "cheveux" | "feminin";
 
-export type AromaticNote =
-  | "fruite"
-  | "bergamote"
-  | "floral"
-  | "epice"
-  | "gourmand"
-  | "mentholé";
+export type HairNeed = "chute" | "densite" | "brillance" | "cuir-chevelu" | "anti-stress" | "eclat";
 
-export type Origin =
-  | "japon"
-  | "chine"
-  | "inde"
-  | "nepal"
-  | "coree"
-  | "vietnam"
-  | "sri-lanka";
-
-export type Need =
-  | "sommeil"
-  | "digestion"
-  | "relaxation"
-  | "energie"
-  | "detox"
-  | "immunite";
-
-export type Selection = "best-sellers" | "bio" | "grand-cru";
-
-export type AccessoryType =
-  | "carte-cadeau"
-  | "infuseur"
-  | "tasse"
-  | "boite"
-  | "coffret";
+export type FeminineNeed = "cycle" | "premenstruel" | "vitalite" | "intime" | "hormonal";
 
 export type Accent =
-  | "green"
-  | "black"
-  | "rooibos"
-  | "white"
-  | "matcha"
-  | "chai"
-  | "wellness"
-  | "gold";
-
-export type WeightVariant = {
-  id: string;
-  weight: "100g" | "500g" | "1kg" | "Unique";
-  sku: string;
-  price: Money;
-  compareAtPrice?: Money;
-  availableForSale: boolean;
-};
+  | "rose"
+  | "terracotta"
+  | "sauge"
+  | "brun"
+  | "creme"
+  | "taupe"
+  | "cuivre"
+  | "or"
+  | "vert-fonce";
 
 export type Preparation = {
   temperatureC: number;
@@ -78,23 +34,28 @@ export type Preparation = {
   advice: string;
 };
 
+export type WeightVariant = {
+  id: string;
+  format: string;
+  sku: string;
+  price: Money;
+  compareAtPrice?: Money;
+  availableForSale: boolean;
+};
+
 export type Product = {
   id: string;
   handle: string;
   title: string;
   vendor: "NAYUMA";
-  universe: Universe;
-  type?: TeaType;
-  notes: AromaticNote[];
-  origin?: Origin;
-  need: Need[];
-  selections: Selection[];
-  accessoryType?: AccessoryType;
-  fineTea: boolean;
+  category: ProductCategory;
+  line?: RitualLine;
+  hairNeeds: HairNeed[];
+  feminineNeeds: FeminineNeed[];
   accent: Accent;
   shortDescription: string;
   descriptionHtml: string;
-  composition: string;
+  actifs: string;
   preparation?: Preparation;
   images: ShopifyImage[];
   variants: WeightVariant[];
@@ -105,9 +66,10 @@ export type Product = {
 export type Collection = {
   handle: string;
   title: string;
-  universe: Universe;
+  category: ProductCategory;
+  line?: RitualLine;
   accent: Accent;
   description: string;
-  filterKey?: "type" | "need" | "selection" | "origin";
+  filterKey?: "hairNeed" | "feminineNeed";
   filterValue?: string;
 };

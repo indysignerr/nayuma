@@ -8,7 +8,7 @@ export default function ContactPage() {
     <main className="mx-auto max-w-[820px] px-6 py-16">
       <h1 className="font-display text-4xl md:text-5xl mb-6">Contactez-nous</h1>
       <p className="text-sm text-ink-soft leading-relaxed mb-10 max-w-lg">
-        Une question sur une commande, un conseil sur un thé, une demande professionnelle ? Notre équipe vous répond
+        Une question sur une commande, un conseil sur un rituel, une demande professionnelle ? Notre équipe vous répond
         sous 24h ouvrées.
       </p>
       <div className="flex flex-col gap-5 text-sm">

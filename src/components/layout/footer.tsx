@@ -6,12 +6,10 @@ const COLUMNS = [
   {
     title: "Collections",
     links: [
-      { label: "Thé vert", href: "/collections/the-vert" },
-      { label: "Thé noir", href: "/collections/the-noir" },
-      { label: "Matcha", href: "/collections/matcha" },
-      { label: "Infusions & Rooibos", href: "/collections/infusions-rooibos" },
-      { label: "Coffrets & Accessoires", href: "/collections/coffrets-accessoires" },
-      { label: "FINE TEA", href: "/fine-tea" },
+      { label: "Rituels Cheveux", href: "/collections/rituels-cheveux" },
+      { label: "Rituels Féminins", href: "/collections/rituels-feminins" },
+      { label: "Cosmétiques NAYUMA", href: "/collections/cosmetiques-nayuma" },
+      { label: "Trouvez votre rituel (quiz)", href: "/quiz" },
     ],
   },
   {
@@ -21,18 +19,16 @@ const COLUMNS = [
       { label: "Livraison & retours", href: "/livraison-retours" },
       { label: "Foire aux questions", href: "/faq" },
       { label: "Suivre ma commande", href: "/suivi-commande" },
-      { label: "Cartes cadeaux", href: "/collections/coffrets-accessoires?type=carte-cadeau" },
     ],
   },
   {
     title: "La maison",
     links: [
       { label: "Notre histoire", href: "/notre-histoire" },
-      { label: "Trouvez votre thé (quiz)", href: "/quiz" },
-      { label: "Guide du thé", href: "/guide-du-the" },
-      { label: "Journal du thé", href: "/journal" },
+      { label: "Le rituel NAYUMA", href: "/rituels" },
+      { label: "Nos ingrédients", href: "/ingredients" },
+      { label: "Journal", href: "/journal" },
       { label: "Engagement bio & traçabilité", href: "/engagement" },
-      { label: "FINE TEA — l'héritage", href: "/fine-tea" },
     ],
   },
 ];
@@ -51,8 +47,8 @@ export function Footer() {
               className="h-14 w-auto invert"
             />
             <p className="mt-5 text-sm text-cream/70 max-w-xs leading-relaxed">
-              Créateur de thés, rooibos, matcha et infusions d&apos;exception. Une sélection pensée pour accompagner
-              chaque instant de votre journée.
+              Des infusions botaniques et cosmétiques pensés pour la santé du cheveu et le bien-être féminin — la
+              beauté par le rituel, plutôt que par l&apos;habitude.
             </p>
             <div className="flex items-center gap-4 mt-6 text-sm">
               <a
@@ -122,6 +118,17 @@ export function Footer() {
               Politique de confidentialité
             </Link>
           </div>
+        </div>
+
+        <div className="mt-6 pt-6 border-t border-cream/15 text-center">
+          <a
+            href="https://manika-bkh.pages.dev"
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs text-cream/60 hover:text-gold-light transition-colors underline underline-offset-4"
+          >
+            Découvrez aussi Manika.Lab — cosmétique capillaire professionnelle
+          </a>
         </div>
       </div>
     </footer>

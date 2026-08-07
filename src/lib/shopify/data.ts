@@ -11,20 +11,21 @@ export function getCollectionByHandle(handle: string): Collection | undefined {
 }
 
 export function getProductsForCollection(collection: Collection): Product[] {
-  const inUniverse = PRODUCTS.filter((p) => p.universe === collection.universe);
-  if (!collection.filterKey || !collection.filterValue) return inUniverse;
+  const base = PRODUCTS.filter((p) => {
+    if (p.category !== collection.category) return false;
+    if (collection.line && p.line !== collection.line) return false;
+    return true;
+  });
+
+  if (!collection.filterKey || !collection.filterValue) return base;
 
   switch (collection.filterKey) {
-    case "type":
-      return inUniverse.filter((p) => p.type === collection.filterValue);
-    case "origin":
-      return inUniverse.filter((p) => p.origin === collection.filterValue);
-    case "need":
-      return inUniverse.filter((p) => p.need.includes(collection.filterValue as never));
-    case "selection":
-      return inUniverse.filter((p) => p.selections.includes(collection.filterValue as never));
+    case "hairNeed":
+      return base.filter((p) => p.hairNeeds.includes(collection.filterValue as never));
+    case "feminineNeed":
+      return base.filter((p) => p.feminineNeeds.includes(collection.filterValue as never));
     default:
-      return inUniverse;
+      return base;
   }
 }
 

@@ -37,7 +37,7 @@ export function StickyAddToCart({
               <p className="text-sm font-medium truncate">{product.title}</p>
               <p className="text-xs text-ink-soft">
                 {formatMoney(variant.price)}
-                {variant.weight !== "Unique" && <span> / {variant.weight}</span>}
+                <span> / {variant.format}</span>
               </p>
             </div>
             <Button onClick={onAdd} className="rounded-sm shrink-0">

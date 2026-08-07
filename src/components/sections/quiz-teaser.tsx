@@ -8,8 +8,8 @@ export function QuizTeaser() {
       <ScrollReveal className="mx-auto max-w-[1240px] px-6 py-8 flex flex-col sm:flex-row items-center justify-center gap-4 text-center sm:text-left">
         <Sparkles className="size-5 text-gold-light shrink-0" />
         <p className="text-sm">
-          Vous ne savez pas quel thé choisir ?{" "}
-          <span className="text-cream/70">Répondez à 4 questions, on s&apos;occupe du reste.</span>
+          Vous ne savez pas quel rituel choisir ?{" "}
+          <span className="text-cream/70">Répondez à 2 questions, on s&apos;occupe du reste.</span>
         </p>
         <Link
           href="/quiz"

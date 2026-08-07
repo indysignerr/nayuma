@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { TeaQuiz } from "@/components/quiz/tea-quiz";
 
 export const metadata: Metadata = {
-  title: "Trouvez votre thé idéal",
-  description: "Répondez à 4 questions pour découvrir les thés NAYUMA qui vous correspondent le mieux.",
+  title: "Trouvez votre rituel idéal",
+  description: "Répondez à 2 questions pour découvrir le rituel NAYUMA qui vous correspond le mieux.",
 };
 
 export default function QuizPage() {

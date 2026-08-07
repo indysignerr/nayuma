@@ -1,0 +1,10 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="400" fill="#f6f0e3"/>
+  <circle cx="200" cy="220" r="130" fill="#b5713f" opacity="0.08"/>
+  <rect x="155" y="150" width="90" height="170" rx="14" fill="#fffaf0" stroke="#b5713f" stroke-width="2"/>
+  <rect x="155" y="150" width="90" height="56" rx="14" fill="#b5713f"/>
+  <rect x="178" y="110" width="44" height="46" rx="6" fill="#fffaf0" stroke="#ab8a4d" stroke-width="1.5"/>
+  <rect x="172" y="98" width="56" height="18" rx="6" fill="#ab8a4d"/>
+  <line x1="170" y1="230" x2="230" y2="230" stroke="#ab8a4d" stroke-width="1.5"/>
+  <text x="200" y="182" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="11" letter-spacing="2" fill="#fffaf0">NAYUMA</text>
+</svg>

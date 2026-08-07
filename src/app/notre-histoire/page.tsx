@@ -9,14 +9,14 @@ export default function NotreHistoirePage() {
       <h1 className="font-display text-4xl md:text-5xl mb-8">Notre histoire</h1>
       <div className="prose">
         <p>
-          NAYUMA est née d&apos;une conviction simple : le thé mérite d&apos;être vécu comme un rituel, pas comme une
-          habitude. De la sélection des jardins jusqu&apos;à la tasse, chaque étape est pensée pour révéler la
-          personnalité de la feuille.
+          NAYUMA est née d&apos;une conviction simple : la beauté se cultive de l&apos;intérieur, pas comme une
+          habitude. De la sélection des plantes jusqu&apos;à l&apos;infusion, chaque étape est pensée pour révéler
+          les bienfaits de la botanique au service du cheveu et du bien-être féminin.
         </p>
         <p>
-          Notre sélection FINE TEA rassemble les crus les plus rares de notre maison — un héritage que nous
-          continuons de faire vivre, saison après saison, aux côtés d&apos;une gamme plus accessible pensée pour
-          accompagner chaque humeur du quotidien.
+          Nos rituels capillaires et féminins rassemblent des actifs choisis avec exigence — une exigence que nous
+          continuons de faire vivre, saison après saison, aux côtés d&apos;une petite gamme de cosmétiques NAYUMA
+          pensée pour accompagner chaque rituel.
         </p>
       </div>
     </main>

@@ -44,11 +44,6 @@ export function ProductDetail({ product }: { product: Product }) {
       <div>
         <div className="relative aspect-square rounded-sm overflow-hidden bg-cream-card border border-cream-line mb-4">
           <span className={`absolute inset-x-0 top-0 h-1 z-10 ${ACCENT_BG[product.accent]}`} aria-hidden />
-          {product.fineTea && (
-            <span className="absolute top-4 left-4 z-10 bg-ink text-cream text-[10px] tracking-widest uppercase px-2 py-1 rounded-sm">
-              Fine Tea
-            </span>
-          )}
           <Image src={product.images[activeImage].url} alt={product.images[activeImage].altText} fill className="object-cover" priority />
         </div>
         {product.images.length > 1 && (
@@ -67,7 +62,7 @@ export function ProductDetail({ product }: { product: Product }) {
       </div>
 
       <div>
-        <p className="text-xs uppercase tracking-wider text-ink-soft mb-2">{categoryLabel(product.universe, product.type)}</p>
+        <p className="text-xs uppercase tracking-wider text-ink-soft mb-2">{categoryLabel(product.category, product.line)}</p>
         <h1 className="font-display text-4xl mb-3">{product.title}</h1>
         <div className="flex items-center gap-1.5 text-sm text-ink-soft mb-5">
           <Star className="size-4 fill-gold text-gold" />
@@ -88,7 +83,7 @@ export function ProductDetail({ product }: { product: Product }) {
                     v.id === variantId ? "border-ink bg-ink text-cream" : "border-cream-line hover:border-ink"
                   }`}
                 >
-                  {v.weight}
+                  {v.format}
                 </button>
               ))}
             </div>
@@ -121,14 +116,6 @@ export function ProductDetail({ product }: { product: Product }) {
               <div dangerouslySetInnerHTML={{ __html: product.descriptionHtml }} className="prose-sm text-ink-soft leading-relaxed [&_p]:mb-3" />
             </AccordionContent>
           </AccordionItem>
-          {product.origin && (
-            <AccordionItem value="origine">
-              <AccordionTrigger>Origine</AccordionTrigger>
-              <AccordionContent className="text-ink-soft leading-relaxed">
-                Récolté et sélectionné avec soin auprès de nos producteurs partenaires.
-              </AccordionContent>
-            </AccordionItem>
-          )}
           {product.preparation && (
             <AccordionItem value="preparation">
               <AccordionTrigger>Préparation</AccordionTrigger>
@@ -147,9 +134,9 @@ export function ProductDetail({ product }: { product: Product }) {
               </AccordionContent>
             </AccordionItem>
           )}
-          <AccordionItem value="composition">
-            <AccordionTrigger>Composition</AccordionTrigger>
-            <AccordionContent className="text-ink-soft leading-relaxed">{product.composition}</AccordionContent>
+          <AccordionItem value="actifs">
+            <AccordionTrigger>Actifs</AccordionTrigger>
+            <AccordionContent className="text-ink-soft leading-relaxed">{product.actifs}</AccordionContent>
           </AccordionItem>
           <AccordionItem value="livraison">
             <AccordionTrigger>Livraison</AccordionTrigger>

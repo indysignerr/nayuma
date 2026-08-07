@@ -24,7 +24,7 @@ export function Newsletter() {
         <ScrollReveal className="max-w-xl mx-auto text-center">
           <h2 className="font-display text-3xl md:text-4xl mb-3">-10% sur votre première commande</h2>
           <p className="text-sm text-cream/70 mb-8">
-            Inscrivez-vous à notre newsletter pour recevoir votre code de bienvenue et suivre nos nouvelles récoltes.
+            Inscrivez-vous à notre newsletter pour recevoir votre code de bienvenue et suivre nos nouveaux rituels.
           </p>
 
           {submitted ? (

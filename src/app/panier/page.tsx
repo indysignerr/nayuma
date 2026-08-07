@@ -34,7 +34,7 @@ export default function PanierPage() {
                   <div className="flex items-start justify-between">
                     <div>
                       <p className="font-medium">{line.title}</p>
-                      <p className="text-sm text-ink-soft">{line.weight}</p>
+                      <p className="text-sm text-ink-soft">{line.format}</p>
                     </div>
                     <button onClick={() => removeLine(line.variantId)} className="text-ink-soft hover:text-terracotta">
                       <X className="size-4" />

@@ -1,127 +1,53 @@
 import { PRODUCTS } from "@/lib/shopify/products";
-import type { Product } from "@/lib/shopify/types";
-
-export type Moment = "matin" | "apres-midi" | "soir" | "tout-moment";
-export type Envie = "energie" | "relaxation" | "digestion" | "gout";
-export type Saveur = "fruite" | "floral" | "epice" | "frais";
-export type Theine = "avec" | "sans" | "peu-importe";
+import { HAIR_NEED_LABELS, FEMININE_NEED_LABELS } from "@/lib/shopify/collections";
+import type { Product, RitualLine, HairNeed, FeminineNeed } from "@/lib/shopify/types";
 
 export type QuizAnswers = {
-  moment?: Moment;
-  envie?: Envie;
-  saveur?: Saveur;
-  theine?: Theine;
+  line?: RitualLine;
+  need?: HairNeed | FeminineNeed;
 };
 
-export const QUIZ_STEPS = [
-  {
-    key: "moment" as const,
-    question: "Quel moment de la journée vous correspond le mieux ?",
-    options: [
-      { value: "matin" as const, label: "Le matin, pour démarrer" },
-      { value: "apres-midi" as const, label: "L'après-midi, pour une pause" },
-      { value: "soir" as const, label: "Le soir, pour se détendre" },
-      { value: "tout-moment" as const, label: "À tout moment de la journée" },
-    ],
-  },
-  {
-    key: "envie" as const,
-    question: "Qu'est-ce qui vous fait envie aujourd'hui ?",
-    options: [
-      { value: "energie" as const, label: "De l'énergie" },
-      { value: "relaxation" as const, label: "Relaxation ou sommeil" },
-      { value: "digestion" as const, label: "Digestion ou detox" },
-      { value: "gout" as const, label: "Simplement un bon goût" },
-    ],
-  },
-  {
-    key: "saveur" as const,
-    question: "Quelles saveurs vous attirent le plus ?",
-    options: [
-      { value: "fruite" as const, label: "Fruité & gourmand" },
-      { value: "floral" as const, label: "Floral & délicat" },
-      { value: "epice" as const, label: "Épicé & corsé" },
-      { value: "frais" as const, label: "Frais & mentholé" },
-    ],
-  },
-  {
-    key: "theine" as const,
-    question: "Avec ou sans théine ?",
-    options: [
-      { value: "avec" as const, label: "Avec théine, ça ne me dérange pas" },
-      { value: "sans" as const, label: "Sans théine de préférence" },
-      { value: "peu-importe" as const, label: "Peu importe" },
-    ],
-  },
-];
+export const LINE_STEP = {
+  key: "line" as const,
+  question: "Quel est votre besoin principal aujourd'hui ?",
+  options: [
+    { value: "cheveux" as const, label: "Prendre soin de mes cheveux" },
+    { value: "feminin" as const, label: "Un rituel de bien-être féminin" },
+  ],
+};
 
-const SANS_THEINE_UNIVERSES = ["infusions-rooibos", "bien-etre-detox"];
+export const HAIR_NEED_STEP = {
+  key: "need" as const,
+  question: "Quelle est votre priorité capillaire ?",
+  options: (Object.keys(HAIR_NEED_LABELS) as HairNeed[]).map((value) => ({
+    value,
+    label: HAIR_NEED_LABELS[value],
+  })),
+};
 
-function scoreProduct(product: Product, answers: QuizAnswers): number {
-  let score = 0;
-
-  switch (answers.moment) {
-    case "matin":
-      if (product.type === "noir") score += 2;
-      if (product.universe === "chai-latte") score += 1;
-      break;
-    case "apres-midi":
-      if (product.type === "vert" || product.type === "blanc") score += 2;
-      break;
-    case "soir":
-      if (product.need.includes("relaxation") || product.need.includes("sommeil")) score += 2;
-      if (SANS_THEINE_UNIVERSES.includes(product.universe)) score += 1;
-      break;
-  }
-
-  switch (answers.envie) {
-    case "energie":
-      if (product.need.includes("energie")) score += 3;
-      break;
-    case "relaxation":
-      if (product.need.includes("relaxation") || product.need.includes("sommeil")) score += 3;
-      break;
-    case "digestion":
-      if (product.need.includes("digestion") || product.need.includes("detox")) score += 3;
-      break;
-    case "gout":
-      if (product.selections.includes("best-sellers")) score += 1;
-      break;
-  }
-
-  switch (answers.saveur) {
-    case "fruite":
-      if (product.notes.includes("fruite") || product.notes.includes("gourmand")) score += 3;
-      break;
-    case "floral":
-      if (product.notes.includes("floral")) score += 3;
-      break;
-    case "epice":
-      if (product.notes.includes("epice")) score += 3;
-      if (product.type === "noir") score += 1;
-      break;
-    case "frais":
-      if (product.notes.includes("mentholé")) score += 3;
-      if (product.type === "vert") score += 1;
-      break;
-  }
-
-  switch (answers.theine) {
-    case "avec":
-      if (SANS_THEINE_UNIVERSES.includes(product.universe)) score -= 2;
-      break;
-    case "sans":
-      score += SANS_THEINE_UNIVERSES.includes(product.universe) ? 3 : -3;
-      break;
-  }
-
-  return score;
-}
+export const FEMININE_NEED_STEP = {
+  key: "need" as const,
+  question: "Quel accompagnement recherchez-vous ?",
+  options: (Object.keys(FEMININE_NEED_LABELS) as FeminineNeed[]).map((value) => ({
+    value,
+    label: FEMININE_NEED_LABELS[value],
+  })),
+};
 
 export function getRecommendations(answers: QuizAnswers, limit = 3): Product[] {
-  const eligible = PRODUCTS.filter((p) => !p.accessoryType);
-  return [...eligible]
-    .map((product) => ({ product, score: scoreProduct(product, answers) }))
+  if (!answers.line || !answers.need) return [];
+
+  const pool = PRODUCTS.filter((p) => p.category === "infusion" && p.line === answers.line);
+
+  const scored = pool.map((product) => {
+    const matches =
+      answers.line === "cheveux"
+        ? product.hairNeeds.includes(answers.need as HairNeed)
+        : product.feminineNeeds.includes(answers.need as FeminineNeed);
+    return { product, score: matches ? 1 : 0 };
+  });
+
+  return scored
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
     .map((r) => r.product);

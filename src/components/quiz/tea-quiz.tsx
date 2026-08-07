@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, RotateCcw } from "lucide-react";
-import { QUIZ_STEPS, getRecommendations, type QuizAnswers } from "@/lib/quiz";
+import { LINE_STEP, HAIR_NEED_STEP, FEMININE_NEED_STEP, getRecommendations, type QuizAnswers } from "@/lib/quiz";
 import { ProductCard } from "@/components/ui/product-card";
 import { Button } from "@/components/ui/button";
 
@@ -14,12 +14,14 @@ export function TeaQuiz() {
   const [direction, setDirection] = useState(1);
   const shouldReduceMotion = useReducedMotion();
 
-  const isDone = stepIndex >= QUIZ_STEPS.length;
-  const step = QUIZ_STEPS[stepIndex];
+  const needStep = answers.line === "feminin" ? FEMININE_NEED_STEP : HAIR_NEED_STEP;
+  const steps = [LINE_STEP, needStep];
+  const isDone = stepIndex >= steps.length;
+  const step = steps[stepIndex];
 
   const recommendations = useMemo(() => (isDone ? getRecommendations(answers) : []), [isDone, answers]);
 
-  function selectAnswer(key: (typeof QUIZ_STEPS)[number]["key"], value: string) {
+  function selectAnswer(key: "line" | "need", value: string) {
     setDirection(1);
     setAnswers((prev) => ({ ...prev, [key]: value }));
     setStepIndex((i) => i + 1);
@@ -48,7 +50,7 @@ export function TeaQuiz() {
         <p className="text-xs uppercase tracking-[0.25em] text-gold-dark mb-4 text-center">Votre résultat</p>
         <h1 className="font-display text-3xl md:text-4xl text-center mb-3">Notre sélection pour vous</h1>
         <p className="text-sm text-ink-soft text-center max-w-md mx-auto mb-10">
-          D&apos;après vos réponses, voici les thés qui devraient vous correspondre le mieux.
+          D&apos;après vos réponses, voici les rituels qui devraient vous correspondre le mieux.
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mb-10">
@@ -61,8 +63,8 @@ export function TeaQuiz() {
           <Button onClick={restart} variant="outline" className="rounded-sm gap-2">
             <RotateCcw className="size-4" /> Refaire le quiz
           </Button>
-          <Link href="/collections/thes" className="text-sm underline underline-offset-4 hover:text-gold-dark transition-colors">
-            Voir toute la collection →
+          <Link href="/collections/rituels-cheveux" className="text-sm underline underline-offset-4 hover:text-gold-dark transition-colors">
+            Voir tous les rituels →
           </Link>
         </div>
       </div>
@@ -82,17 +84,17 @@ export function TeaQuiz() {
         <div className="flex-1 h-1 rounded-full bg-cream-deep overflow-hidden">
           <div
             className="h-full bg-gold-dark transition-all duration-500"
-            style={{ width: `${(stepIndex / QUIZ_STEPS.length) * 100}%` }}
+            style={{ width: `${(stepIndex / steps.length) * 100}%` }}
           />
         </div>
         <span className="text-xs text-ink-soft w-10 text-right">
-          {stepIndex + 1}/{QUIZ_STEPS.length}
+          {stepIndex + 1}/{steps.length}
         </span>
       </div>
 
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
-          key={step.key}
+          key={`${step.key}-${stepIndex}`}
           custom={direction}
           variants={variants}
           initial="enter"

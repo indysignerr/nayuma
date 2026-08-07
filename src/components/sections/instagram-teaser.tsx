@@ -15,7 +15,7 @@ export function InstagramTeaser() {
             Suivez-nous <span className="text-gold-dark">@nayuma_tea</span>
           </p>
           <p className="text-sm text-ink-soft max-w-md">
-            Nos dernières récoltes, rituels et coulisses de la maison sont à retrouver chaque semaine sur Instagram.
+            Nos derniers rituels, actifs du moment et coulisses de la maison sont à retrouver chaque semaine sur Instagram.
           </p>
           <Link
             href="https://www.instagram.com/nayuma_tea/"
