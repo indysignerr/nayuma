@@ -2,6 +2,7 @@ import { Hero } from "@/components/sections/hero";
 import { QuizTeaser } from "@/components/sections/quiz-teaser";
 import { FeaturedProducts } from "@/components/sections/featured-products";
 import { UniversesBand } from "@/components/sections/universes-band";
+import { SisterBrand } from "@/components/sections/sister-brand";
 import { IngredientsStory } from "@/components/sections/ingredients-story";
 import { JournalTeaser } from "@/components/sections/journal-teaser";
 import { Reassurance } from "@/components/sections/reassurance";
@@ -16,6 +17,7 @@ export default function Home() {
       <QuizTeaser />
       <FeaturedProducts />
       <UniversesBand />
+      <SisterBrand />
       <IngredientsStory />
       <JournalTeaser />
       <Reassurance />

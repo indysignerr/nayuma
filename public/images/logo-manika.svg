@@ -1,0 +1,12 @@
+<svg viewBox="0 0 340 90" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="manikaTitle">
+  <title id="manikaTitle">MANIKA.LAB — Cosmétique capillaire professionnelle</title>
+  <g font-family="'Helvetica Neue', Arial, sans-serif" font-weight="400" font-size="30" letter-spacing="4">
+    <text x="0" y="45" fill="currentColor">M</text>
+    <path d="M 38 45 L 48 20 L 58 45" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linejoin="round" />
+    <text x="70" y="45" fill="currentColor">NIK</text>
+    <path d="M 158 45 L 168 20 L 178 45" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linejoin="round" />
+    <circle cx="196" cy="42" r="2.6" fill="currentColor" opacity="0.6" />
+    <text x="206" y="45" fill="currentColor" opacity="0.6">LAB</text>
+  </g>
+  <line x1="0" y1="62" x2="290" y2="62" stroke="currentColor" stroke-width="1" opacity="0.5" />
+</svg>

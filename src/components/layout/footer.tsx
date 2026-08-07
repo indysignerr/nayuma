@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, Phone, CreditCard } from "lucide-react";
+import { Mail, Phone, CreditCard, ArrowUpRight } from "lucide-react";
 
 const COLUMNS = [
   {
@@ -120,16 +120,21 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-6 pt-6 border-t border-cream/15 text-center">
-          <a
-            href="https://manika-bkh.pages.dev"
-            target="_blank"
-            rel="noreferrer"
-            className="text-xs text-cream/60 hover:text-gold-light transition-colors underline underline-offset-4"
-          >
-            Découvrez aussi Manika.Lab — cosmétique capillaire professionnelle
-          </a>
-        </div>
+        <a
+          href="https://manika-bkh.pages.dev"
+          target="_blank"
+          rel="noreferrer"
+          className="group mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 rounded-sm border border-cream/20 px-6 py-4 hover:border-gold-light transition-colors"
+        >
+          <span className="text-sm text-cream/80">
+            <span className="text-cream font-medium">NAYUMA</span> et{" "}
+            <span className="text-cream font-medium">MANIKA.LAB</span> appartiennent à la même maison — découvrez
+            notre cosmétique capillaire professionnelle.
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-gold-light group-hover:text-cream transition-colors shrink-0">
+            Visiter Manika.Lab <ArrowUpRight className="size-4" />
+          </span>
+        </a>
       </div>
     </footer>
   );
