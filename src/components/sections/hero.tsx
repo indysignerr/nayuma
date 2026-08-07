@@ -21,8 +21,8 @@ export function Hero() {
             <Button asChild size="lg" className="rounded-sm px-8">
               <Link href="/collections/rituels-cheveux">Explorer les rituels</Link>
             </Button>
-            <Link href="/quiz" className="text-sm underline underline-offset-4 text-gold-dark hover:text-ink transition-colors">
-              Trouver mon rituel
+            <Link href="/collections/rituels-feminins" className="text-sm underline underline-offset-4 text-gold-dark hover:text-ink transition-colors">
+              Rituels féminins
             </Link>
           </div>
         </div>

@@ -9,7 +9,6 @@ const COLUMNS = [
       { label: "Rituels Cheveux", href: "/collections/rituels-cheveux" },
       { label: "Rituels Féminins", href: "/collections/rituels-feminins" },
       { label: "Cosmétiques NAYUMA", href: "/collections/cosmetiques-nayuma" },
-      { label: "Trouvez votre rituel (quiz)", href: "/quiz" },
     ],
   },
   {

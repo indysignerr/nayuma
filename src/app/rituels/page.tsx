@@ -11,7 +11,7 @@ const STEPS = [
   {
     number: "01",
     title: "Choisir",
-    text: "Identifiez votre priorité du moment — capillaire ou féminine — et laissez-vous guider par nos rituels ou par notre quiz.",
+    text: "Identifiez votre priorité du moment — capillaire ou féminine — et laissez-vous guider par nos rituels.",
   },
   {
     number: "02",
@@ -53,10 +53,10 @@ export default function RituelsPage() {
 
       <section className="mx-auto max-w-[1000px] px-6 py-16 text-center">
         <Link
-          href="/quiz"
+          href="/collections/rituels-cheveux"
           className="inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4 hover:text-gold-dark transition-colors"
         >
-          Trouver mon rituel <ArrowRight className="size-4" />
+          Découvrir les rituels <ArrowRight className="size-4" />
         </Link>
       </section>
     </main>
