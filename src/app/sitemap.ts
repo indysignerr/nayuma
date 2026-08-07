@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllCollections } from "@/lib/shopify/data";
 import { getAllProducts } from "@/lib/shopify/products";
+import { getAllJournalPosts } from "@/lib/journal";
 
 export const dynamic = "force-static";
 
@@ -9,7 +10,9 @@ const BASE_URL = "https://nayumatea.com";
 const STATIC_ROUTES = [
   "",
   "/fine-tea",
+  "/quiz",
   "/guide-du-the",
+  "/journal",
   "/notre-histoire",
   "/engagement",
   "/contact",
@@ -39,5 +42,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticEntries, ...collectionEntries, ...productEntries];
+  const journalEntries: MetadataRoute.Sitemap = getAllJournalPosts().map((post) => ({
+    url: `${BASE_URL}/journal/${post.slug}`,
+    changeFrequency: "yearly",
+    priority: 0.5,
+  }));
+
+  return [...staticEntries, ...collectionEntries, ...productEntries, ...journalEntries];
 }

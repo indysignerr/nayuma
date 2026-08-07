@@ -28,7 +28,9 @@ const COLUMNS = [
     title: "La maison",
     links: [
       { label: "Notre histoire", href: "/notre-histoire" },
+      { label: "Trouvez votre thé (quiz)", href: "/quiz" },
       { label: "Guide du thé", href: "/guide-du-the" },
+      { label: "Journal du thé", href: "/journal" },
       { label: "Engagement bio & traçabilité", href: "/engagement" },
       { label: "FINE TEA — l'héritage", href: "/fine-tea" },
     ],

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Minus, Plus, Star, Truck, Thermometer, Timer } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
@@ -8,6 +8,7 @@ import { formatMoney } from "@/lib/shopify/format";
 import { categoryLabel, ACCENT_BG } from "@/lib/accent";
 import { useCart } from "@/lib/cart-context";
 import { Button } from "@/components/ui/button";
+import { StickyAddToCart } from "@/components/product/sticky-add-to-cart";
 import {
   Accordion,
   AccordionContent,
@@ -19,9 +20,24 @@ export function ProductDetail({ product }: { product: Product }) {
   const [activeImage, setActiveImage] = useState(0);
   const [variantId, setVariantId] = useState(product.variants[0].id);
   const [quantity, setQuantity] = useState(1);
+  const [showSticky, setShowSticky] = useState(false);
+  const ctaRef = useRef<HTMLDivElement>(null);
   const { addLine } = useCart();
 
   const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0];
+
+  useEffect(() => {
+    const el = ctaRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowSticky(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+      },
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="mx-auto max-w-[1240px] px-6 py-12 grid md:grid-cols-2 gap-12">
@@ -79,7 +95,7 @@ export function ProductDetail({ product }: { product: Product }) {
           </div>
         )}
 
-        <div className="flex items-center gap-4 mb-8">
+        <div ref={ctaRef} className="flex items-center gap-4 mb-8">
           <div className="flex items-center border border-cream-line rounded-sm">
             <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="size-11 flex items-center justify-center hover:bg-cream-deep">
               <Minus className="size-3.5" />
@@ -144,6 +160,13 @@ export function ProductDetail({ product }: { product: Product }) {
           </AccordionItem>
         </Accordion>
       </div>
+
+      <StickyAddToCart
+        product={product}
+        variant={variant}
+        visible={showSticky}
+        onAdd={() => addLine(product, variant, quantity)}
+      />
     </div>
   );
 }
