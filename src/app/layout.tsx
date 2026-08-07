@@ -5,6 +5,7 @@ import { CartProvider } from "@/lib/cart-context";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/layout/cart-drawer";
+import { IntroAnimation } from "@/components/layout/intro-animation";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         <CartProvider>
+          <IntroAnimation />
           <Header />
           <div className="flex-1">{children}</div>
           <Footer />

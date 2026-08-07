@@ -53,7 +53,12 @@ export function Footer() {
               chaque instant de votre journée.
             </p>
             <div className="flex items-center gap-4 mt-6 text-sm">
-              <a href="#" className="hover:text-gold-light transition-colors underline underline-offset-4">
+              <a
+                href="https://www.instagram.com/nayumatea"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-gold-light transition-colors underline underline-offset-4"
+              >
                 Instagram
               </a>
               <a href="#" className="hover:text-gold-light transition-colors underline underline-offset-4">
