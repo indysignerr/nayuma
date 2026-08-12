@@ -1,0 +1,7 @@
+<svg viewBox="0 0 420 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fineTeaTitle">
+  <title id="fineTeaTitle">FINE TEA — Créateur de thés d'exception</title>
+  <text x="210" y="62" text-anchor="middle" font-family="'Cormorant Garamond', 'Times New Roman', serif" font-size="52" letter-spacing="10" fill="currentColor">FINE TEA</text>
+  <text x="372" y="34" font-family="'Cormorant Garamond', serif" font-size="16" fill="currentColor">&#174;</text>
+  <rect x="150" y="86" width="55" height="10" fill="#1d3a63"/>
+  <rect x="215" y="86" width="55" height="10" fill="#a4342a"/>
+</svg>

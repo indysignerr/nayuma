@@ -4,8 +4,8 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { X, SlidersHorizontal } from "lucide-react";
 import type { Collection, Product } from "@/lib/shopify/types";
-import { HAIR_NEED_LABELS, FEMININE_NEED_LABELS } from "@/lib/shopify/collections";
-import { unique } from "@/lib/facets";
+import { NOTE_LABELS, ORIGIN_LABELS, NEED_LABELS, ACCESSORY_LABELS } from "@/lib/shopify/collections";
+import { SELECTION_LABELS, unique } from "@/lib/facets";
 import { ProductCard } from "@/components/ui/product-card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-type FacetKey = "hairNeed" | "feminineNeed";
+type FacetKey = "notes" | "origin" | "need" | "selections" | "accessoryType";
 
 type FilterState = Record<FacetKey, string[]>;
 
@@ -29,19 +29,31 @@ export function CollectionGrid({ collection, products }: { collection: Collectio
   const searchParams = useSearchParams();
 
   const [filters, setFilters] = useState<FilterState>(() => ({
-    hairNeed: searchParams.get("besoin")?.split(",").filter(Boolean) ?? [],
-    feminineNeed: searchParams.get("besoin-feminin")?.split(",").filter(Boolean) ?? [],
+    notes: searchParams.get("notes")?.split(",").filter(Boolean) ?? [],
+    origin: searchParams.get("origin")?.split(",").filter(Boolean) ?? [],
+    need: searchParams.get("need")?.split(",").filter(Boolean) ?? [],
+    selections: searchParams.get("selection")?.split(",").filter(Boolean) ?? [],
+    accessoryType: searchParams.get("type")?.split(",").filter(Boolean) ?? [],
   }));
   const [sort, setSort] = useState<"pertinence" | "prix-asc" | "prix-desc">("pertinence");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  const availableHairNeeds = useMemo(() => unique(products.flatMap((p) => p.hairNeeds)), [products]);
-  const availableFeminineNeeds = useMemo(() => unique(products.flatMap((p) => p.feminineNeeds)), [products]);
+  const availableNotes = useMemo(() => unique(products.flatMap((p) => p.notes)), [products]);
+  const availableOrigins = useMemo(() => unique(products.map((p) => p.origin).filter(Boolean)) as string[], [products]);
+  const availableNeeds = useMemo(() => unique(products.flatMap((p) => p.need)), [products]);
+  const availableSelections = useMemo(() => unique(products.flatMap((p) => p.selections)), [products]);
+  const availableAccessoryTypes = useMemo(
+    () => unique(products.map((p) => p.accessoryType).filter(Boolean)) as string[],
+    [products]
+  );
 
   const filtered = useMemo(() => {
     let list = products.filter((p) => {
-      if (filters.hairNeed.length && !filters.hairNeed.some((n) => p.hairNeeds.includes(n as never))) return false;
-      if (filters.feminineNeed.length && !filters.feminineNeed.some((n) => p.feminineNeeds.includes(n as never)))
+      if (filters.notes.length && !filters.notes.some((n) => p.notes.includes(n as never))) return false;
+      if (filters.origin.length && !(p.origin && filters.origin.includes(p.origin))) return false;
+      if (filters.need.length && !filters.need.some((n) => p.need.includes(n as never))) return false;
+      if (filters.selections.length && !filters.selections.some((s) => p.selections.includes(s as never))) return false;
+      if (filters.accessoryType.length && !(p.accessoryType && filters.accessoryType.includes(p.accessoryType)))
         return false;
       return true;
     });
@@ -54,8 +66,11 @@ export function CollectionGrid({ collection, products }: { collection: Collectio
 
   const activeChips = useMemo(() => {
     const chips: { key: FacetKey; value: string; label: string }[] = [];
-    filters.hairNeed.forEach((v) => chips.push({ key: "hairNeed", value: v, label: HAIR_NEED_LABELS[v] ?? v }));
-    filters.feminineNeed.forEach((v) => chips.push({ key: "feminineNeed", value: v, label: FEMININE_NEED_LABELS[v] ?? v }));
+    filters.notes.forEach((v) => chips.push({ key: "notes", value: v, label: NOTE_LABELS[v] ?? v }));
+    filters.origin.forEach((v) => chips.push({ key: "origin", value: v, label: ORIGIN_LABELS[v] ?? v }));
+    filters.need.forEach((v) => chips.push({ key: "need", value: v, label: NEED_LABELS[v] ?? v }));
+    filters.selections.forEach((v) => chips.push({ key: "selections", value: v, label: SELECTION_LABELS[v] ?? v }));
+    filters.accessoryType.forEach((v) => chips.push({ key: "accessoryType", value: v, label: ACCESSORY_LABELS[v] ?? v }));
     return chips;
   }, [filters]);
 
@@ -64,7 +79,7 @@ export function CollectionGrid({ collection, products }: { collection: Collectio
   }
 
   function clearAll() {
-    setFilters({ hairNeed: [], feminineNeed: [] });
+    setFilters({ notes: [], origin: [], need: [], selections: [], accessoryType: [] });
   }
 
   const FacetGroup = ({ title, options, labels, facetKey }: { title: string; options: string[]; labels: Record<string, string>; facetKey: FacetKey }) =>
@@ -90,8 +105,11 @@ export function CollectionGrid({ collection, products }: { collection: Collectio
 
   const sidebar = (
     <div>
-      <FacetGroup title="Besoin capillaire" options={availableHairNeeds} labels={HAIR_NEED_LABELS} facetKey="hairNeed" />
-      <FacetGroup title="Besoin féminin" options={availableFeminineNeeds} labels={FEMININE_NEED_LABELS} facetKey="feminineNeed" />
+      <FacetGroup title="Notes aromatiques" options={availableNotes} labels={NOTE_LABELS} facetKey="notes" />
+      <FacetGroup title="Origine" options={availableOrigins} labels={ORIGIN_LABELS} facetKey="origin" />
+      <FacetGroup title="Besoin" options={availableNeeds} labels={NEED_LABELS} facetKey="need" />
+      <FacetGroup title="Sélection" options={availableSelections} labels={SELECTION_LABELS} facetKey="selections" />
+      <FacetGroup title="Catégorie" options={availableAccessoryTypes} labels={ACCESSORY_LABELS} facetKey="accessoryType" />
     </div>
   );
 

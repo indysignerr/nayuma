@@ -7,7 +7,7 @@ export type CartLine = {
   variantId: string;
   productHandle: string;
   title: string;
-  format: WeightVariant["format"];
+  weight: WeightVariant["weight"];
   image: string;
   unitAmount: number;
   quantity: number;
@@ -64,7 +64,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           variantId: variant.id,
           productHandle: product.handle,
           title: product.title,
-          format: variant.format,
+          weight: variant.weight,
           image: product.images[0]?.url ?? "",
           unitAmount: Number(variant.price.amount),
           quantity,

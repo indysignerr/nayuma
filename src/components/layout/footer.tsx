@@ -1,14 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, Phone, CreditCard, ArrowUpRight } from "lucide-react";
+import { Mail, Phone, CreditCard } from "lucide-react";
 
 const COLUMNS = [
   {
     title: "Collections",
     links: [
-      { label: "Rituels Cheveux", href: "/collections/rituels-cheveux" },
-      { label: "Rituels Féminins", href: "/collections/rituels-feminins" },
-      { label: "Cosmétiques NAYUMA", href: "/collections/cosmetiques-nayuma" },
+      { label: "Thé vert", href: "/collections/the-vert" },
+      { label: "Thé noir", href: "/collections/the-noir" },
+      { label: "Matcha", href: "/collections/matcha" },
+      { label: "Infusions & Rooibos", href: "/collections/infusions-rooibos" },
+      { label: "Coffrets & Accessoires", href: "/collections/coffrets-accessoires" },
+      { label: "FINE TEA", href: "/fine-tea" },
     ],
   },
   {
@@ -18,16 +21,18 @@ const COLUMNS = [
       { label: "Livraison & retours", href: "/livraison-retours" },
       { label: "Foire aux questions", href: "/faq" },
       { label: "Suivre ma commande", href: "/suivi-commande" },
+      { label: "Cartes cadeaux", href: "/collections/coffrets-accessoires?type=carte-cadeau" },
     ],
   },
   {
     title: "La maison",
     links: [
       { label: "Notre histoire", href: "/notre-histoire" },
-      { label: "Le rituel NAYUMA", href: "/rituels" },
-      { label: "Nos ingrédients", href: "/ingredients" },
-      { label: "Journal", href: "/journal" },
+      { label: "Trouvez votre thé (quiz)", href: "/quiz" },
+      { label: "Guide du thé", href: "/guide-du-the" },
+      { label: "Journal du thé", href: "/journal" },
       { label: "Engagement bio & traçabilité", href: "/engagement" },
+      { label: "FINE TEA — l'héritage", href: "/fine-tea" },
     ],
   },
 ];
@@ -46,8 +51,8 @@ export function Footer() {
               className="h-14 w-auto invert"
             />
             <p className="mt-5 text-sm text-cream/70 max-w-xs leading-relaxed">
-              Des infusions botaniques et cosmétiques pensés pour la santé du cheveu et le bien-être féminin — la
-              beauté par le rituel, plutôt que par l&apos;habitude.
+              Créateur de thés, rooibos, matcha et infusions d&apos;exception. Une sélection pensée pour accompagner
+              chaque instant de votre journée.
             </p>
             <div className="flex items-center gap-4 mt-6 text-sm">
               <a
@@ -118,22 +123,6 @@ export function Footer() {
             </Link>
           </div>
         </div>
-
-        <a
-          href="https://manika-bkh.pages.dev"
-          target="_blank"
-          rel="noreferrer"
-          className="group mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 rounded-sm border border-cream/20 px-6 py-4 hover:border-gold-light transition-colors"
-        >
-          <span className="text-sm text-cream/80">
-            <span className="text-cream font-medium">NAYUMA</span> et{" "}
-            <span className="text-cream font-medium">MANIKA.LAB</span> appartiennent à la même maison — découvrez
-            notre cosmétique capillaire professionnelle.
-          </span>
-          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-gold-light group-hover:text-cream transition-colors shrink-0">
-            Visiter Manika.Lab <ArrowUpRight className="size-4" />
-          </span>
-        </a>
       </div>
     </footer>
   );
