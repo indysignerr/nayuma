@@ -20,6 +20,7 @@ const STATIC_ROUTES = [
   "/livraison-retours",
   "/suivi-commande",
   "/mentions-legales",
+  "/conditions-generales-de-vente",
   "/politique-de-confidentialite",
 ];
 

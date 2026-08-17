@@ -115,13 +115,19 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-8 border-t border-cream/15 text-sm text-cream/70">
-          <p>© {new Date().getFullYear()} NAYUMA Tea &amp; Mood. Tous droits réservés.</p>
+          <p>© {new Date().getFullYear()} SAS MANIKA LAB — NAYUMA Tea &amp; Mood. Tous droits réservés.</p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <Link href="/mentions-legales" className="hover:text-cream transition-colors">
               Mentions légales
             </Link>
+            <Link href="/conditions-generales-de-vente" className="hover:text-cream transition-colors">
+              CGV
+            </Link>
             <Link href="/politique-de-confidentialite" className="hover:text-cream transition-colors">
               Politique de confidentialité
+            </Link>
+            <Link href="/livraison-retours" className="hover:text-cream transition-colors">
+              Politique d&apos;expédition
             </Link>
           </div>
         </div>
