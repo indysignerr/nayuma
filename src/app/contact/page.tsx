@@ -20,8 +20,8 @@ export default function ContactPage() {
         </p>
         <p className="flex items-center gap-3">
           <Phone className="size-5 text-gold-dark" />
-          <a href="tel:+33100000000" className="hover:text-gold-dark transition-colors">
-            01 00 00 00 00
+          <a href="tel:+33620149060" className="hover:text-gold-dark transition-colors">
+            06 20 14 90 60
           </a>
         </p>
         <p className="flex items-center gap-3 text-ink-soft">
