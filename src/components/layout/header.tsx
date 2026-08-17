@@ -46,7 +46,7 @@ export function Header({ products }: { products: ProductPreview[] }) {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 bg-cream/95 backdrop-blur-sm transition-shadow",
+        "sticky top-0 z-50 bg-cream transition-shadow",
         scrolled && "shadow-[0_1px_0_0_var(--color-cream-line)]"
       )}
       onMouseLeave={handleLeave}
