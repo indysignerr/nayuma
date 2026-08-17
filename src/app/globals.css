@@ -20,6 +20,7 @@
   --color-tea-matcha: #3f7a5d;
   --color-tea-chai: #9c5a33;
   --color-tea-wellness: #6f8f7a;
+  --color-tea-cuivre: #b3703f;
 
   --font-display: var(--font-cormorant);
   --font-body: var(--font-work-sans);
@@ -65,6 +66,7 @@
   --color-tea-matcha: var(--color-tea-matcha);
   --color-tea-chai: var(--color-tea-chai);
   --color-tea-wellness: var(--color-tea-wellness);
+  --color-tea-cuivre: var(--color-tea-cuivre);
 
   --font-display: var(--font-display);
   --font-body: var(--font-body);

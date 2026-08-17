@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { JOURNAL_POSTS, getJournalPostBySlug, formatJournalDate } from "@/lib/journal";
-import { getCollectionByHandle } from "@/lib/shopify/data";
+import { getCollectionByHandle } from "@/lib/shopify/collections";
 import { ACCENT_BG } from "@/lib/accent";
 
 type Params = Promise<{ slug: string }>;
@@ -27,7 +27,7 @@ export default async function JournalArticlePage({ params }: { params: Params })
   const { slug } = await params;
   const post = getJournalPostBySlug(slug);
   if (!post) notFound();
-  const relatedCollection = post.relatedCollectionHandle ? getCollectionByHandle(post.relatedCollectionHandle) : undefined;
+  const relatedCollection = post.relatedCollectionHandle ? await getCollectionByHandle(post.relatedCollectionHandle) : undefined;
 
   return (
     <main className="mx-auto max-w-[720px] px-6 py-16">

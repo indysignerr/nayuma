@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 const formatter = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
 
 export default function PanierPage() {
-  const { lines, subtotal, updateQuantity, removeLine } = useCart();
+  const { lines, subtotal, updateQuantity, removeLine, checkout, checkingOut, checkoutError } = useCart();
 
   return (
     <main className="mx-auto max-w-[1240px] px-6 py-16 min-h-[60vh]">
@@ -34,7 +34,7 @@ export default function PanierPage() {
                   <div className="flex items-start justify-between">
                     <div>
                       <p className="font-medium">{line.title}</p>
-                      <p className="text-sm text-ink-soft">{line.weight}</p>
+                      <p className="text-sm text-ink-soft">{line.variantTitle}</p>
                     </div>
                     <button onClick={() => removeLine(line.variantId)} className="text-ink-soft hover:text-terracotta">
                       <X className="size-4" />
@@ -71,12 +71,10 @@ export default function PanierPage() {
               <span>Total</span>
               <span>{formatter.format(subtotal)}</span>
             </div>
-            <Button size="lg" className="w-full rounded-sm gap-2" disabled>
-              <Lock className="size-4" /> Paiement sécurisé Shopify
+            {checkoutError && <p className="text-xs text-terracotta mb-3">{checkoutError}</p>}
+            <Button size="lg" className="w-full rounded-sm gap-2" onClick={checkout} disabled={checkingOut}>
+              <Lock className="size-4" /> {checkingOut ? "Redirection..." : "Paiement sécurisé Shopify"}
             </Button>
-            <p className="text-xs text-ink-soft mt-3 text-center">
-              Le checkout Shopify sera activé dès la connexion de la boutique à l&apos;API Storefront.
-            </p>
           </aside>
         </div>
       )}

@@ -6,10 +6,10 @@ const COLUMNS = [
   {
     title: "Collections",
     links: [
-      { label: "Thé vert", href: "/collections/the-vert" },
-      { label: "Thé noir", href: "/collections/the-noir" },
-      { label: "Matcha", href: "/collections/matcha" },
-      { label: "Infusions & Rooibos", href: "/collections/infusions-rooibos" },
+      { label: "Thé vert", href: "/collections/thes-verts-althea" },
+      { label: "Thé noir", href: "/collections/the-noir-en-vrac" },
+      { label: "Matcha", href: "/collections/collection-matcha-en-vrac" },
+      { label: "Infusions & Rooibos", href: "/collections/infusions-et-rooibos" },
       { label: "Coffrets & Accessoires", href: "/collections/coffrets-accessoires" },
       { label: "FINE TEA", href: "/fine-tea" },
     ],
@@ -21,7 +21,7 @@ const COLUMNS = [
       { label: "Livraison & retours", href: "/livraison-retours" },
       { label: "Foire aux questions", href: "/faq" },
       { label: "Suivre ma commande", href: "/suivi-commande" },
-      { label: "Cartes cadeaux", href: "/collections/coffrets-accessoires?type=carte-cadeau" },
+      { label: "Cartes cadeaux", href: "/collections/coffrets-accessoires" },
     ],
   },
   {
@@ -31,8 +31,10 @@ const COLUMNS = [
       { label: "Trouvez votre thé (quiz)", href: "/quiz" },
       { label: "Guide du thé", href: "/guide-du-the" },
       { label: "Journal du thé", href: "/journal" },
+      { label: "Soins capillaires — RACINE", href: "/collections/soins-capillaires-au-the" },
+      { label: "Collection Ayurveda", href: "/collections/collection-ayrveda-en-vrac" },
+      { label: "Thés de Noël", href: "/collections/thes-de-noel-en-vrac" },
       { label: "Engagement bio & traçabilité", href: "/engagement" },
-      { label: "FINE TEA — l'héritage", href: "/fine-tea" },
     ],
   },
 ];

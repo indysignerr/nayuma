@@ -6,26 +6,27 @@ import { CrossSell } from "@/components/product/cross-sell";
 
 type Params = Promise<{ slug: string }>;
 
-export function generateStaticParams() {
-  return getAllProducts().map((p) => ({ slug: p.handle }));
+export async function generateStaticParams() {
+  const products = await getAllProducts();
+  return products.map((p) => ({ slug: p.handle }));
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductByHandle(slug);
+  const product = await getProductByHandle(slug);
   if (!product) return {};
   return {
     title: product.title,
-    description: product.shortDescription,
-    openGraph: { title: product.title, description: product.shortDescription },
+    description: product.description,
+    openGraph: { title: product.title, description: product.description },
   };
 }
 
 export default async function ProductPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const product = getProductByHandle(slug);
+  const product = await getProductByHandle(slug);
   if (!product) notFound();
-  const related = getRelatedProducts(product);
+  const related = await getRelatedProducts(product);
 
   return (
     <main>
@@ -36,20 +37,14 @@ export default async function ProductPage({ params }: { params: Params }) {
             "@context": "https://schema.org",
             "@type": "Product",
             name: product.title,
-            description: product.shortDescription,
-            image: product.images.map((i) => `https://nayumatea.com${i.url}`),
-            brand: { "@type": "Brand", name: "NAYUMA" },
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: product.rating,
-              reviewCount: product.reviewCount,
-            },
+            description: product.description,
+            image: product.images.map((i) => i.url),
+            brand: { "@type": "Brand", name: product.vendor },
             offers: product.variants.map((v) => ({
               "@type": "Offer",
               price: v.price.amount,
               priceCurrency: v.price.currencyCode,
               availability: v.availableForSale ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-              sku: v.sku,
             })),
           }),
         }}

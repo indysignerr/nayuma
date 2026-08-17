@@ -1,56 +1,12 @@
 export type Money = {
   amount: string;
-  currencyCode: "EUR";
+  currencyCode: string;
 };
 
 export type ShopifyImage = {
   url: string;
-  altText: string;
+  altText: string | null;
 };
-
-export type Universe =
-  | "thes"
-  | "infusions-rooibos"
-  | "thes-glaces"
-  | "chai-latte"
-  | "bien-etre-detox"
-  | "coffrets-accessoires";
-
-export type TeaType = "vert" | "blanc" | "noir" | "matcha";
-
-export type AromaticNote =
-  | "fruite"
-  | "bergamote"
-  | "floral"
-  | "epice"
-  | "gourmand"
-  | "mentholé";
-
-export type Origin =
-  | "japon"
-  | "chine"
-  | "inde"
-  | "nepal"
-  | "coree"
-  | "vietnam"
-  | "sri-lanka";
-
-export type Need =
-  | "sommeil"
-  | "digestion"
-  | "relaxation"
-  | "energie"
-  | "detox"
-  | "immunite";
-
-export type Selection = "best-sellers" | "bio" | "grand-cru";
-
-export type AccessoryType =
-  | "carte-cadeau"
-  | "infuseur"
-  | "tasse"
-  | "boite"
-  | "coffret";
 
 export type Accent =
   | "green"
@@ -60,54 +16,42 @@ export type Accent =
   | "matcha"
   | "chai"
   | "wellness"
-  | "gold";
+  | "gold"
+  | "cuivre";
 
-export type WeightVariant = {
+export type ProductVariant = {
   id: string;
-  weight: "100g" | "500g" | "1kg" | "Unique";
-  sku: string;
+  title: string;
   price: Money;
-  compareAtPrice?: Money;
+  compareAtPrice?: Money | null;
   availableForSale: boolean;
-};
-
-export type Preparation = {
-  temperatureC: number;
-  minutesMin: number;
-  minutesMax: number;
-  advice: string;
+  selectedOptions: { name: string; value: string }[];
 };
 
 export type Product = {
   id: string;
   handle: string;
   title: string;
-  vendor: "NAYUMA";
-  universe: Universe;
-  type?: TeaType;
-  notes: AromaticNote[];
-  origin?: Origin;
-  need: Need[];
-  selections: Selection[];
-  accessoryType?: AccessoryType;
-  fineTea: boolean;
-  accent: Accent;
-  shortDescription: string;
+  vendor: string;
+  productType: string;
+  tags: string[];
   descriptionHtml: string;
-  composition: string;
-  preparation?: Preparation;
+  description: string;
   images: ShopifyImage[];
-  variants: WeightVariant[];
-  rating: number;
-  reviewCount: number;
+  variants: ProductVariant[];
+  minPrice: Money;
+  maxPrice: Money;
+  collectionHandles: string[];
+  accent: Accent;
+  fineTea: boolean;
 };
 
+export type ProductPreview = Pick<Product, "handle" | "title" | "images" | "variants" | "accent" | "fineTea">;
+
 export type Collection = {
+  id: string;
   handle: string;
   title: string;
-  universe: Universe;
-  accent: Accent;
   description: string;
-  filterKey?: "type" | "need" | "selection" | "origin";
-  filterValue?: string;
+  image?: ShopifyImage;
 };

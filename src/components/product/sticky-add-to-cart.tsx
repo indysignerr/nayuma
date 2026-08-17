@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import type { Product, WeightVariant } from "@/lib/shopify/types";
+import type { Product, ProductVariant } from "@/lib/shopify/types";
 import { formatMoney } from "@/lib/shopify/format";
 import { Button } from "@/components/ui/button";
 
@@ -13,7 +13,7 @@ export function StickyAddToCart({
   onAdd,
 }: {
   product: Product;
-  variant: WeightVariant;
+  variant: ProductVariant;
   visible: boolean;
   onAdd: () => void;
 }) {
@@ -37,7 +37,7 @@ export function StickyAddToCart({
               <p className="text-sm font-medium truncate">{product.title}</p>
               <p className="text-xs text-ink-soft">
                 {formatMoney(variant.price)}
-                {variant.weight !== "Unique" && <span> / {variant.weight}</span>}
+                {product.variants.length > 1 && <span> / {variant.title}</span>}
               </p>
             </div>
             <Button onClick={onAdd} className="rounded-sm shrink-0">

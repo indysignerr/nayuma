@@ -1,11 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { Minus, Plus, X } from "lucide-react";
+import { Minus, Plus, X, Lock } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -17,8 +15,20 @@ import {
 const formatter = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
 
 export function CartDrawer() {
-  const { isOpen, closeCart, openCart, lines, subtotal, freeShippingThreshold, remainingForFreeShipping, updateQuantity, removeLine } =
-    useCart();
+  const {
+    isOpen,
+    closeCart,
+    openCart,
+    lines,
+    subtotal,
+    freeShippingThreshold,
+    remainingForFreeShipping,
+    updateQuantity,
+    removeLine,
+    checkout,
+    checkingOut,
+    checkoutError,
+  } = useCart();
 
   const progress = Math.min(100, ((freeShippingThreshold - remainingForFreeShipping) / freeShippingThreshold) * 100);
 
@@ -69,7 +79,7 @@ export function CartDrawer() {
                         <X className="size-4" />
                       </button>
                     </div>
-                    <p className="text-xs text-ink-soft mt-0.5">{line.weight}</p>
+                    <p className="text-xs text-ink-soft mt-0.5">{line.variantTitle}</p>
                     <div className="flex items-center justify-between mt-2">
                       <div className="flex items-center gap-1 border border-cream-line rounded">
                         <button
@@ -102,8 +112,14 @@ export function CartDrawer() {
             <span className="text-ink-soft">Sous-total</span>
             <span className="font-display text-xl">{formatter.format(subtotal)}</span>
           </div>
-          <Button asChild size="lg" disabled={lines.length === 0} className="w-full rounded-sm">
-            <Link href="/panier">Passer commande</Link>
+          {checkoutError && <p className="text-xs text-terracotta">{checkoutError}</p>}
+          <Button
+            size="lg"
+            disabled={lines.length === 0 || checkingOut}
+            onClick={checkout}
+            className="w-full rounded-sm gap-2"
+          >
+            <Lock className="size-4" /> {checkingOut ? "Redirection..." : "Passer commande"}
           </Button>
           <button onClick={closeCart} className="text-xs text-center text-ink-soft hover:text-ink underline underline-offset-4">
             Continuer mes achats

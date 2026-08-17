@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllCollections } from "@/lib/shopify/data";
+import { getAllCollections } from "@/lib/shopify/collections";
 import { getAllProducts } from "@/lib/shopify/products";
 import { getAllJournalPosts } from "@/lib/journal";
 
@@ -23,20 +23,22 @@ const STATIC_ROUTES = [
   "/politique-de-confidentialite",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((route) => ({
     url: `${BASE_URL}${route}`,
     changeFrequency: route === "" ? "daily" : "monthly",
     priority: route === "" ? 1 : 0.6,
   }));
 
-  const collectionEntries: MetadataRoute.Sitemap = getAllCollections().map((c) => ({
+  const [collections, products] = await Promise.all([getAllCollections(), getAllProducts()]);
+
+  const collectionEntries: MetadataRoute.Sitemap = collections.map((c) => ({
     url: `${BASE_URL}/collections/${c.handle}`,
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
-  const productEntries: MetadataRoute.Sitemap = getAllProducts().map((p) => ({
+  const productEntries: MetadataRoute.Sitemap = products.map((p) => ({
     url: `${BASE_URL}/produits/${p.handle}`,
     changeFrequency: "weekly",
     priority: 0.7,

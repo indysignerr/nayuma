@@ -9,8 +9,8 @@ export const metadata: Metadata = {
     "FINE TEA rassemble les crus les plus rares de la maison NAYUMA : lots limités, sourcés à la main, réservés aux amateurs.",
 };
 
-export default function FineTeaPage() {
-  const products = getFineTeaProducts();
+export default async function FineTeaPage() {
+  const products = await getFineTeaProducts();
 
   return (
     <main>

@@ -1,4 +1,4 @@
-import { PRODUCTS } from "@/lib/shopify/products";
+import { getAllProducts } from "@/lib/shopify/products";
 import type { Product } from "@/lib/shopify/types";
 
 export type Moment = "matin" | "apres-midi" | "soir" | "tout-moment";
@@ -55,71 +55,83 @@ export const QUIZ_STEPS = [
   },
 ];
 
-const SANS_THEINE_UNIVERSES = ["infusions-rooibos", "bien-etre-detox"];
+const SANS_THEINE_TYPES = ["INFUSIONS & ROOIBOS", "BIEN ETRE", "BIEN ETRE BEST SELLERS", "INFUSION FRUITE"];
+const SOMMEIL_HANDLES = ["sommeil", "bien-etre-sommeil", "infusions-rooibos-sommeil"];
+const ENERGIE_HANDLES = ["energie", "bien-etre-energie", "infusion-rooibos-energie"];
+const RELAXATION_HANDLES = ["relaxation", "bien-etre-relaxation", "infusion-rooibos-relaxation", ...SOMMEIL_HANDLES];
+const DIGESTION_HANDLES = ["digestion", "bien-etre-digestion", "infusions-rooibos-digestion"];
+const ACCESSORY_TYPES = ["coffret & accessoires"];
+
+function hasAny(handles: string[], targets: string[]): boolean {
+  return targets.some((t) => handles.includes(t));
+}
 
 function scoreProduct(product: Product, answers: QuizAnswers): number {
   let score = 0;
+  const type = product.productType.toUpperCase();
+  const handles = product.collectionHandles;
 
   switch (answers.moment) {
     case "matin":
-      if (product.type === "noir") score += 2;
-      if (product.universe === "chai-latte") score += 1;
+      if (type.includes("NOIR") || type.includes("CHAI")) score += 2;
       break;
     case "apres-midi":
-      if (product.type === "vert" || product.type === "blanc") score += 2;
+      if (type.includes("VERT")) score += 2;
+      if (type.includes("MATCHA")) score += 1;
       break;
     case "soir":
-      if (product.need.includes("relaxation") || product.need.includes("sommeil")) score += 2;
-      if (SANS_THEINE_UNIVERSES.includes(product.universe)) score += 1;
+      if (hasAny(handles, RELAXATION_HANDLES) || handles.includes("bien-etre-detox")) score += 2;
+      if (type.includes("INFUSIONS")) score += 1;
       break;
   }
 
   switch (answers.envie) {
     case "energie":
-      if (product.need.includes("energie")) score += 3;
+      if (hasAny(handles, ENERGIE_HANDLES)) score += 3;
       break;
     case "relaxation":
-      if (product.need.includes("relaxation") || product.need.includes("sommeil")) score += 3;
+      if (hasAny(handles, RELAXATION_HANDLES)) score += 3;
       break;
     case "digestion":
-      if (product.need.includes("digestion") || product.need.includes("detox")) score += 3;
+      if (hasAny(handles, DIGESTION_HANDLES) || handles.includes("bien-etre-detox-1")) score += 3;
       break;
     case "gout":
-      if (product.selections.includes("best-sellers")) score += 1;
+      if (handles.includes("best-sellers") || handles.includes("best-sellers-infusions-rooibos")) score += 1;
       break;
   }
 
   switch (answers.saveur) {
     case "fruite":
-      if (product.notes.includes("fruite") || product.notes.includes("gourmand")) score += 3;
+      if (handles.includes("fruites") || handles.includes("gourmand") || handles.includes("agrumes")) score += 3;
       break;
     case "floral":
-      if (product.notes.includes("floral")) score += 3;
+      if (handles.includes("florales") || handles.includes("jasmiin")) score += 3;
       break;
     case "epice":
-      if (product.notes.includes("epice")) score += 3;
-      if (product.type === "noir") score += 1;
+      if (handles.includes("epices")) score += 3;
+      if (type.includes("NOIR")) score += 1;
       break;
     case "frais":
-      if (product.notes.includes("mentholé")) score += 3;
-      if (product.type === "vert") score += 1;
+      if (handles.includes("menthe")) score += 3;
+      if (type.includes("VERT")) score += 1;
       break;
   }
 
   switch (answers.theine) {
     case "avec":
-      if (SANS_THEINE_UNIVERSES.includes(product.universe)) score -= 2;
+      if (SANS_THEINE_TYPES.some((t) => type.includes(t))) score -= 2;
       break;
     case "sans":
-      score += SANS_THEINE_UNIVERSES.includes(product.universe) ? 3 : -3;
+      score += SANS_THEINE_TYPES.some((t) => type.includes(t)) ? 3 : -3;
       break;
   }
 
   return score;
 }
 
-export function getRecommendations(answers: QuizAnswers, limit = 3): Product[] {
-  const eligible = PRODUCTS.filter((p) => !p.accessoryType);
+export async function getRecommendations(answers: QuizAnswers, limit = 3): Promise<Product[]> {
+  const products = await getAllProducts();
+  const eligible = products.filter((p) => !ACCESSORY_TYPES.includes(p.productType.toLowerCase()) && p.variants.length > 0);
   return [...eligible]
     .map((product) => ({ product, score: scoreProduct(product, answers) }))
     .sort((a, b) => b.score - a.score)

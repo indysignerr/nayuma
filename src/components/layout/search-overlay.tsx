@@ -5,10 +5,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { X, Search } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { getAllProducts } from "@/lib/shopify/products";
+import type { ProductPreview } from "@/lib/shopify/types";
 import { formatMoney } from "@/lib/shopify/format";
 
-export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function SearchOverlay({
+  open,
+  onClose,
+  products,
+}: {
+  open: boolean;
+  onClose: () => void;
+  products: ProductPreview[];
+}) {
   const [query, setQuery] = useState("");
   const shouldReduceMotion = useReducedMotion();
 
@@ -27,10 +35,8 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
   const results = useMemo(() => {
     if (query.trim().length < 2) return [];
     const q = query.toLowerCase();
-    return getAllProducts()
-      .filter((p) => p.title.toLowerCase().includes(q))
-      .slice(0, 6);
-  }, [query]);
+    return products.filter((p) => p.title.toLowerCase().includes(q)).slice(0, 6);
+  }, [query, products]);
 
   return (
     <AnimatePresence>
@@ -62,11 +68,11 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                   <li key={p.handle}>
                     <Link href={`/produits/${p.handle}`} onClick={onClose} className="flex items-center gap-3 group">
                       <div className="size-14 rounded-sm overflow-hidden bg-cream border border-cream-line shrink-0">
-                        <Image src={p.images[0].url} alt="" width={56} height={56} className="size-full object-cover" />
+                        {p.images[0] && <Image src={p.images[0].url} alt="" width={56} height={56} className="size-full object-cover" />}
                       </div>
                       <div>
                         <p className="text-sm group-hover:text-gold-dark transition-colors">{p.title}</p>
-                        <p className="text-xs text-ink-soft">{formatMoney(p.variants[0].price)}</p>
+                        {p.variants[0] && <p className="text-xs text-ink-soft">{formatMoney(p.variants[0].price)}</p>}
                       </div>
                     </Link>
                   </li>

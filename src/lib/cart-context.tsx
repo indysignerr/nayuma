@@ -1,13 +1,14 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import type { Product, WeightVariant } from "@/lib/shopify/types";
+import type { Product, ProductVariant } from "@/lib/shopify/types";
+import { shopifyFetch } from "@/lib/shopify/storefront-client";
 
 export type CartLine = {
   variantId: string;
   productHandle: string;
   title: string;
-  weight: WeightVariant["weight"];
+  variantTitle: string;
   image: string;
   unitAmount: number;
   quantity: number;
@@ -20,11 +21,14 @@ type CartContextValue = {
   subtotal: number;
   freeShippingThreshold: number;
   remainingForFreeShipping: number;
+  checkingOut: boolean;
+  checkoutError: string | null;
   openCart: () => void;
   closeCart: () => void;
-  addLine: (product: Product, variant: WeightVariant, quantity?: number) => void;
+  addLine: (product: Product, variant: ProductVariant, quantity?: number) => void;
   removeLine: (variantId: string) => void;
   updateQuantity: (variantId: string, quantity: number) => void;
+  checkout: () => Promise<void>;
 };
 
 const FREE_SHIPPING_THRESHOLD = 49;
@@ -32,10 +36,21 @@ const STORAGE_KEY = "nayuma-cart";
 
 const CartContext = createContext<CartContextValue | null>(null);
 
+const CART_CREATE_MUTATION = `
+  mutation CartCreate($lines: [CartLineInput!]!) {
+    cartCreate(input: { lines: $lines }) {
+      cart { id checkoutUrl }
+      userErrors { field message }
+    }
+  }
+`;
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [checkingOut, setCheckingOut] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   useEffect(() => {
     try {
@@ -52,7 +67,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(lines));
   }, [lines, hydrated]);
 
-  const addLine = useCallback((product: Product, variant: WeightVariant, quantity = 1) => {
+  const addLine = useCallback((product: Product, variant: ProductVariant, quantity = 1) => {
     setLines((prev) => {
       const existing = prev.find((l) => l.variantId === variant.id);
       if (existing) {
@@ -64,7 +79,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           variantId: variant.id,
           productHandle: product.handle,
           title: product.title,
-          weight: variant.weight,
+          variantTitle: variant.title,
           image: product.images[0]?.url ?? "",
           unitAmount: Number(variant.price.amount),
           quantity,
@@ -86,6 +101,34 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     );
   }, []);
 
+  const checkout = useCallback(async () => {
+    if (lines.length === 0) return;
+    setCheckingOut(true);
+    setCheckoutError(null);
+    try {
+      const data = await shopifyFetch<{
+        cartCreate: {
+          cart: { id: string; checkoutUrl: string } | null;
+          userErrors: { field: string[]; message: string }[];
+        };
+      }>(CART_CREATE_MUTATION, {
+        lines: lines.map((l) => ({ merchandiseId: l.variantId, quantity: l.quantity })),
+      });
+
+      if (data.cartCreate.userErrors.length > 0) {
+        throw new Error(data.cartCreate.userErrors.map((e) => e.message).join(", "));
+      }
+      if (!data.cartCreate.cart) {
+        throw new Error("Impossible de créer le panier Shopify.");
+      }
+
+      window.location.href = data.cartCreate.cart.checkoutUrl;
+    } catch (err) {
+      setCheckoutError(err instanceof Error ? err.message : "Une erreur est survenue.");
+      setCheckingOut(false);
+    }
+  }, [lines]);
+
   const subtotal = useMemo(() => lines.reduce((sum, l) => sum + l.unitAmount * l.quantity, 0), [lines]);
   const totalQuantity = useMemo(() => lines.reduce((sum, l) => sum + l.quantity, 0), [lines]);
   const remainingForFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
@@ -97,11 +140,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     subtotal,
     freeShippingThreshold: FREE_SHIPPING_THRESHOLD,
     remainingForFreeShipping,
+    checkingOut,
+    checkoutError,
     openCart: () => setIsOpen(true),
     closeCart: () => setIsOpen(false),
     addLine,
     removeLine,
     updateQuantity,
+    checkout,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

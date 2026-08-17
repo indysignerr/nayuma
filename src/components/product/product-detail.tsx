@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Minus, Plus, Star, Truck, Thermometer, Timer } from "lucide-react";
+import { Minus, Plus, Truck } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
 import { formatMoney } from "@/lib/shopify/format";
 import { categoryLabel, ACCENT_BG } from "@/lib/accent";
@@ -18,13 +18,14 @@ import {
 
 export function ProductDetail({ product }: { product: Product }) {
   const [activeImage, setActiveImage] = useState(0);
-  const [variantId, setVariantId] = useState(product.variants[0].id);
+  const [variantId, setVariantId] = useState(product.variants[0]?.id);
   const [quantity, setQuantity] = useState(1);
   const [showSticky, setShowSticky] = useState(false);
   const ctaRef = useRef<HTMLDivElement>(null);
   const { addLine } = useCart();
 
   const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0];
+  const image = product.images[activeImage] ?? product.images[0];
 
   useEffect(() => {
     const el = ctaRef.current;
@@ -49,7 +50,7 @@ export function ProductDetail({ product }: { product: Product }) {
               Fine Tea
             </span>
           )}
-          <Image src={product.images[activeImage].url} alt={product.images[activeImage].altText} fill className="object-cover" priority />
+          {image && <Image src={image.url} alt={image.altText ?? product.title} fill className="object-cover" priority />}
         </div>
         {product.images.length > 1 && (
           <div className="flex gap-3">
@@ -67,28 +68,24 @@ export function ProductDetail({ product }: { product: Product }) {
       </div>
 
       <div>
-        <p className="text-xs uppercase tracking-wider text-ink-soft mb-2">{categoryLabel(product.universe, product.type)}</p>
+        <p className="text-xs uppercase tracking-wider text-ink-soft mb-2">{categoryLabel(product)}</p>
         <h1 className="font-display text-4xl mb-3">{product.title}</h1>
-        <div className="flex items-center gap-1.5 text-sm text-ink-soft mb-5">
-          <Star className="size-4 fill-gold text-gold" />
-          <span>{product.rating}</span>
-          <span>({product.reviewCount} avis)</span>
-        </div>
-        <p className="font-display text-3xl mb-6">{formatMoney(variant.price)}</p>
+        {variant && <p className="font-display text-3xl mb-6">{formatMoney(variant.price)}</p>}
 
         {product.variants.length > 1 && (
           <div className="mb-6">
             <p className="text-xs uppercase tracking-widest text-ink-soft mb-3">Format</p>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {product.variants.map((v) => (
                 <button
                   key={v.id}
                   onClick={() => setVariantId(v.id)}
-                  className={`px-4 py-2 text-sm rounded-sm border transition-colors ${
+                  disabled={!v.availableForSale}
+                  className={`px-4 py-2 text-sm rounded-sm border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
                     v.id === variantId ? "border-ink bg-ink text-cream" : "border-cream-line hover:border-ink"
                   }`}
                 >
-                  {v.weight}
+                  {v.title}
                 </button>
               ))}
             </div>
@@ -105,8 +102,13 @@ export function ProductDetail({ product }: { product: Product }) {
               <Plus className="size-3.5" />
             </button>
           </div>
-          <Button size="lg" className="flex-1 rounded-sm" onClick={() => addLine(product, variant, quantity)}>
-            Ajouter au panier
+          <Button
+            size="lg"
+            className="flex-1 rounded-sm"
+            disabled={!variant || !variant.availableForSale}
+            onClick={() => variant && addLine(product, variant, quantity)}
+          >
+            {variant?.availableForSale === false ? "Épuisé" : "Ajouter au panier"}
           </Button>
         </div>
 
@@ -121,36 +123,6 @@ export function ProductDetail({ product }: { product: Product }) {
               <div dangerouslySetInnerHTML={{ __html: product.descriptionHtml }} className="prose-sm text-ink-soft leading-relaxed [&_p]:mb-3" />
             </AccordionContent>
           </AccordionItem>
-          {product.origin && (
-            <AccordionItem value="origine">
-              <AccordionTrigger>Origine</AccordionTrigger>
-              <AccordionContent className="text-ink-soft leading-relaxed">
-                Récolté et sélectionné avec soin auprès de nos producteurs partenaires.
-              </AccordionContent>
-            </AccordionItem>
-          )}
-          {product.preparation && (
-            <AccordionItem value="preparation">
-              <AccordionTrigger>Préparation</AccordionTrigger>
-              <AccordionContent>
-                <div className="flex items-center gap-6 text-ink-soft mb-2">
-                  <span className="flex items-center gap-1.5">
-                    <Thermometer className="size-4" /> {product.preparation.temperatureC}°C
-                  </span>
-                  {product.preparation.minutesMax > 0 && (
-                    <span className="flex items-center gap-1.5">
-                      <Timer className="size-4" /> {product.preparation.minutesMin}–{product.preparation.minutesMax} min
-                    </span>
-                  )}
-                </div>
-                <p className="text-ink-soft leading-relaxed">{product.preparation.advice}</p>
-              </AccordionContent>
-            </AccordionItem>
-          )}
-          <AccordionItem value="composition">
-            <AccordionTrigger>Composition</AccordionTrigger>
-            <AccordionContent className="text-ink-soft leading-relaxed">{product.composition}</AccordionContent>
-          </AccordionItem>
           <AccordionItem value="livraison">
             <AccordionTrigger>Livraison</AccordionTrigger>
             <AccordionContent className="text-ink-soft leading-relaxed">
@@ -161,12 +133,14 @@ export function ProductDetail({ product }: { product: Product }) {
         </Accordion>
       </div>
 
-      <StickyAddToCart
-        product={product}
-        variant={variant}
-        visible={showSticky}
-        onAdd={() => addLine(product, variant, quantity)}
-      />
+      {variant && (
+        <StickyAddToCart
+          product={product}
+          variant={variant}
+          visible={showSticky}
+          onAdd={() => addLine(product, variant, quantity)}
+        />
+      )}
     </div>
   );
 }

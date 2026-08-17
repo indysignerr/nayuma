@@ -5,8 +5,8 @@ import { getFineTeaProducts } from "@/lib/shopify/products";
 import { formatMoney } from "@/lib/shopify/format";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
-export function FineTeaSection() {
-  const products = getFineTeaProducts().slice(0, 5);
+export async function FineTeaSection() {
+  const products = (await getFineTeaProducts()).slice(0, 5);
 
   return (
     <section className="border-y border-gold/30 bg-gradient-to-b from-cream-deep to-cream">
@@ -36,16 +36,18 @@ export function FineTeaSection() {
                   <span className="absolute top-2 left-2 z-10 bg-ink text-cream text-[9px] tracking-widest uppercase px-1.5 py-0.5 rounded-sm">
                     Fine Tea
                   </span>
-                  <Image
-                    src={p.images[0].url}
-                    alt={p.images[0].altText}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 20vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+                  {p.images[0] && (
+                    <Image
+                      src={p.images[0].url}
+                      alt={p.images[0].altText ?? p.title}
+                      fill
+                      sizes="(max-width: 768px) 50vw, 20vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  )}
                 </div>
                 <p className="font-display text-base mt-3 group-hover:text-gold-dark transition-colors">{p.title}</p>
-                <p className="text-xs text-ink-soft">{formatMoney(p.variants[0].price)}</p>
+                {p.variants[0] && <p className="text-xs text-ink-soft">{formatMoney(p.variants[0].price)}</p>}
               </Link>
             </ScrollReveal>
           ))}

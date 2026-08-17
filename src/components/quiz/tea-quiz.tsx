@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, RotateCcw } from "lucide-react";
 import { QUIZ_STEPS, getRecommendations, type QuizAnswers } from "@/lib/quiz";
+import type { Product } from "@/lib/shopify/types";
 import { ProductCard } from "@/components/ui/product-card";
 import { Button } from "@/components/ui/button";
 
@@ -12,12 +13,28 @@ export function TeaQuiz() {
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswers>({});
   const [direction, setDirection] = useState(1);
+  const [recommendations, setRecommendations] = useState<Product[]>([]);
+  const [loadingResults, setLoadingResults] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   const isDone = stepIndex >= QUIZ_STEPS.length;
   const step = QUIZ_STEPS[stepIndex];
 
-  const recommendations = useMemo(() => (isDone ? getRecommendations(answers) : []), [isDone, answers]);
+  useEffect(() => {
+    if (!isDone) return;
+    let cancelled = false;
+    setLoadingResults(true);
+    getRecommendations(answers).then((results) => {
+      if (!cancelled) {
+        setRecommendations(results);
+        setLoadingResults(false);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDone]);
 
   function selectAnswer(key: (typeof QUIZ_STEPS)[number]["key"], value: string) {
     setDirection(1);
@@ -51,11 +68,15 @@ export function TeaQuiz() {
           D&apos;après vos réponses, voici les thés qui devraient vous correspondre le mieux.
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mb-10">
-          {recommendations.map((p) => (
-            <ProductCard key={p.handle} product={p} />
-          ))}
-        </div>
+        {loadingResults ? (
+          <p className="text-sm text-ink-soft text-center py-10">Recherche de votre sélection...</p>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mb-10">
+            {recommendations.map((p) => (
+              <ProductCard key={p.handle} product={p} />
+            ))}
+          </div>
+        )}
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button onClick={restart} variant="outline" className="rounded-sm gap-2">

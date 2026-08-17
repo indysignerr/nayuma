@@ -5,11 +5,13 @@ import { ACCENT_BG } from "@/lib/accent";
 import type { Accent } from "@/lib/shopify/types";
 
 const UNIVERSES: { label: string; href: string; accent: Accent }[] = [
-  { label: "Thés", href: "/collections/thes", accent: "green" },
-  { label: "Infusions & Rooibos", href: "/collections/infusions-rooibos", accent: "rooibos" },
-  { label: "Thés glacés", href: "/collections/the-glace", accent: "matcha" },
-  { label: "Chai Latté", href: "/collections/chai-latte", accent: "chai" },
-  { label: "Bien-être & Detox", href: "/collections/bien-etre-detox", accent: "wellness" },
+  { label: "Thés verts", href: "/collections/thes-verts-althea", accent: "green" },
+  { label: "Thé noir", href: "/collections/the-noir-en-vrac", accent: "black" },
+  { label: "Matcha", href: "/collections/collection-matcha-en-vrac", accent: "matcha" },
+  { label: "Rooibos & Infusions", href: "/collections/rooibos-et-infusions-en-vrac", accent: "rooibos" },
+  { label: "Thés glacés", href: "/collections/thes-infusion-glaces-ice-cup-en-vrac-au-kg", accent: "green" },
+  { label: "Chai Latté", href: "/collections/collection-chai-latte-en-vrac-1-kg", accent: "chai" },
+  { label: "Bien-être & Détox", href: "/collections/bien-etre-detox", accent: "wellness" },
   { label: "Coffrets & Accessoires", href: "/collections/coffrets-accessoires", accent: "gold" },
 ];
 
@@ -20,7 +22,7 @@ export function UniversesBand() {
         <ScrollReveal>
           <h2 className="font-display text-3xl md:text-4xl mb-8">Les univers de thé</h2>
         </ScrollReveal>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-cream-line border border-cream-line">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-cream-line border border-cream-line">
           {UNIVERSES.map((u, i) => (
             <ScrollReveal key={u.href} delay={i * 0.04}>
               <Link
@@ -29,7 +31,7 @@ export function UniversesBand() {
               >
                 <span className="flex items-center gap-3">
                   <span className={`size-2 rounded-full ${ACCENT_BG[u.accent]}`} aria-hidden />
-                  <span className="font-display text-xl">{u.label}</span>
+                  <span className="font-display text-lg">{u.label}</span>
                 </span>
                 <ArrowRight className="size-4 shrink-0 -translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
               </Link>

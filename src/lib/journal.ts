@@ -23,7 +23,7 @@ export const JOURNAL_POSTS: JournalPost[] = [
     excerpt: "Une méthode simple pour un thé glacé maison qui n'a rien à envier aux versions industrielles.",
     date: "2026-07-20",
     readMinutes: 4,
-    relatedCollectionHandle: "the-glace",
+    relatedCollectionHandle: "thes-infusion-glaces-ice-cup-en-vrac-au-kg",
     paragraphs: [
       "Le thé glacé maison n'a rien de compliqué, à condition de respecter une règle simple : ne jamais faire infuser à froid un thé pensé pour l'eau chaude sans ajuster le temps de contact. Trop court, l'infusion manque de caractère. Trop long, elle vire à l'amertume.",
       "Étape 1 : infusez votre thé deux fois plus concentré que d'habitude, à la bonne température pour le type choisi. Étape 2 : laissez refroidir à température ambiante avant de réfrigérer — verser du thé chaud directement sur des glaçons dilue les arômes. Étape 3 : servez sur glace pilée, avec une rondelle de citron ou quelques feuilles de menthe fraîche.",
@@ -38,7 +38,7 @@ export const JOURNAL_POSTS: JournalPost[] = [
     excerpt: "Direction la région d'Uji, berceau historique du matcha japonais, pour comprendre ce qui distingue un grand cru.",
     date: "2026-06-15",
     readMinutes: 6,
-    relatedCollectionHandle: "matcha",
+    relatedCollectionHandle: "collection-matcha-en-vrac",
     paragraphs: [
       "À une trentaine de kilomètres de Kyoto, la région d'Uji cultive le thé depuis plus de huit siècles. C'est ici que naît la majorité des matchas de cérémonie les plus recherchés au monde, sur des parcelles ombragées durant les trois semaines précédant la récolte — une technique appelée ombrage qui concentre la chlorophylle et les acides aminés responsables de la douceur umami si particulière du matcha.",
       "Les feuilles récoltées à la main, appelées tencha, sont étuvées, séchées puis débarrassées de leurs nervures avant d'être broyées lentement entre des meules de pierre. Ce processus, qui peut prendre plus d'une heure pour obtenir seulement 40 grammes de poudre, explique en grande partie l'écart de prix entre un matcha cérémoniel et un matcha culinaire.",
@@ -53,7 +53,7 @@ export const JOURNAL_POSTS: JournalPost[] = [
     excerpt: "Sans théine, riche en antioxydants : le rooibos s'impose naturellement comme le compagnon des fins de journée.",
     date: "2026-05-02",
     readMinutes: 5,
-    relatedCollectionHandle: "infusions-rooibos",
+    relatedCollectionHandle: "rooibos-et-infusions-en-vrac",
     paragraphs: [
       "Contrairement au thé, le rooibos ne provient pas du théier mais d'un arbuste originaire de la région du Cederberg, en Afrique du Sud. Naturellement dépourvu de théine, il peut se consommer à toute heure sans perturber le sommeil — un atout de poids pour qui cherche un rituel apaisant en fin de journée.",
       "Sa richesse en antioxydants, notamment l'aspalathine qu'on ne trouve que dans le rooibos, en fait une infusion appréciée pour accompagner la détente. Sa robe rouge cuivrée et ses notes naturellement boisées et légèrement sucrées se prêtent particulièrement bien aux associations gourmandes : vanille, fruits rouges, caramel.",
@@ -68,7 +68,7 @@ export const JOURNAL_POSTS: JournalPost[] = [
     excerpt: "Chaque printemps, les jardins de Darjeeling produisent une récolte rare et recherchée : le first flush.",
     date: "2026-04-10",
     readMinutes: 5,
-    relatedCollectionHandle: "origine-inde",
+    relatedCollectionHandle: "inde",
     paragraphs: [
       "Dans les jardins de Darjeeling, nichés entre 600 et 2 000 mètres d'altitude sur les contreforts himalayens, la première récolte de l'année — le first flush — a lieu entre fin février et avril, dès la repousse des bourgeons après l'hiver.",
       "Cette récolte se distingue par sa liqueur claire, ses notes florales et légèrement astringentes, très éloignées du profil corsé qu'on associe généralement au thé noir. Les puristes la considèrent souvent comme la plus fine de l'année, avant que les récoltes suivantes ne développent des arômes plus ronds et maltés.",
@@ -83,7 +83,7 @@ export const JOURNAL_POSTS: JournalPost[] = [
     excerpt: "Du plus classique au plus gourmand, cinq variations autour du chai latté à tester chez vous.",
     date: "2026-03-05",
     readMinutes: 4,
-    relatedCollectionHandle: "chai-latte",
+    relatedCollectionHandle: "collection-chai-latte-en-vrac-1-kg",
     paragraphs: [
       "Le chai latté classique s'obtient en infusant un thé noir épicé (cannelle, cardamome, gingembre, clou de girofle) puis en l'allongeant à parts égales avec du lait chaud mousseux. Simple, réconfortant, redoutablement efficace.",
       "Pour une version plus gourmande, ajoutez une cuillère de miel et une pointe de vanille en fin de préparation. Version glacée : infusez plus concentré, laissez refroidir, puis versez sur glaçons avec du lait froid. Version végétale : le lait d'avoine, plus riche, sublime particulièrement les épices du chai.",

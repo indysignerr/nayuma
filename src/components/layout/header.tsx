@@ -12,8 +12,9 @@ import { SearchOverlay } from "./search-overlay";
 import { NAV_ITEMS } from "@/lib/nav-config";
 import { useCart } from "@/lib/cart-context";
 import { cn } from "@/lib/utils";
+import type { ProductPreview } from "@/lib/shopify/types";
 
-export function Header() {
+export function Header({ products }: { products: ProductPreview[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -116,12 +117,12 @@ export function Header() {
         <AnimatePresence>
           {activeItem?.columns && (
             <div onMouseEnter={() => handleEnter(openIndex!)}>
-              <MegaMenu item={activeItem} onNavigate={() => setOpenIndex(null)} />
+              <MegaMenu item={activeItem} products={products} onNavigate={() => setOpenIndex(null)} />
             </div>
           )}
         </AnimatePresence>
 
-        <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+        <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} products={products} />
       </div>
 
       <MobileNav open={mobileOpen} onOpenChange={setMobileOpen} />

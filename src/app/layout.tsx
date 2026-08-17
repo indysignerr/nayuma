@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/layout/cart-drawer";
 import { IntroAnimation } from "@/components/layout/intro-animation";
+import { getAllProducts } from "@/lib/shopify/products";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -49,7 +50,17 @@ export const viewport: Viewport = {
   themeColor: "#18140d",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const products = await getAllProducts();
+  const productPreviews = products.map((p) => ({
+    handle: p.handle,
+    title: p.title,
+    images: p.images.slice(0, 1),
+    variants: p.variants.slice(0, 1),
+    accent: p.accent,
+    fineTea: p.fineTea,
+  }));
+
   return (
     <html lang="fr" className={`${cormorant.variable} ${workSans.variable}`}>
       <body className="min-h-screen flex flex-col bg-cream text-ink font-body antialiased">
@@ -68,7 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <CartProvider>
           <IntroAnimation />
-          <Header />
+          <Header products={productPreviews} />
           <div className="flex-1">{children}</div>
           <Footer />
           <CartDrawer />
