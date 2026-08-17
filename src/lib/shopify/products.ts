@@ -1,7 +1,19 @@
 import { cache } from "react";
+import sanitizeHtml from "sanitize-html";
 import { shopifyFetch } from "./storefront-client";
 import { accentForProduct } from "@/lib/accent";
 import type { Product } from "./types";
+
+function sanitizeDescription(html: string): string {
+  return sanitizeHtml(html, {
+    allowedTags: ["p", "br", "strong", "b", "em", "i", "u", "ul", "ol", "li", "span", "a"],
+    allowedAttributes: { a: ["href"] },
+    allowedSchemes: ["http", "https", "mailto"],
+    transformTags: {
+      a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer", target: "_blank" }),
+    },
+  });
+}
 
 const PRODUCTS_QUERY = `
   query Products($first: Int!, $after: String) {
@@ -83,7 +95,7 @@ function mapProduct(node: RawProductNode): Product {
     vendor: node.vendor,
     productType: node.productType,
     tags: node.tags,
-    descriptionHtml: node.descriptionHtml,
+    descriptionHtml: sanitizeDescription(node.descriptionHtml),
     description: node.description,
     images: node.images.edges.map((e) => e.node),
     variants: node.variants.edges.map((e) => ({
