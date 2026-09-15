@@ -1,3 +1,5 @@
+import type { Dosage } from "@/lib/b2b";
+
 export type Money = {
   amount: string;
   currencyCode: string;
@@ -44,9 +46,14 @@ export type Product = {
   collectionHandles: string[];
   accent: Accent;
   fineTea: boolean;
+  isGiftCard: boolean;
+  /** Taux de TVA appliqué au prix TTC Shopify (0 pour les cartes cadeaux). */
+  vatRate: number;
+  /** Dosage conseillé lu dans la fiche, pour le coût à la tasse. */
+  dosage: Dosage | null;
 };
 
-export type ProductPreview = Pick<Product, "handle" | "title" | "images" | "variants" | "accent" | "fineTea">;
+export type ProductPreview = Pick<Product, "handle" | "title" | "images" | "variants" | "accent" | "fineTea" | "vatRate">;
 
 export type Collection = {
   id: string;

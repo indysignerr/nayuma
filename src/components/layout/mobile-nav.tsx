@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { NAV_ITEMS } from "@/lib/nav-config";
+import { CustomerModeToggle } from "./customer-mode-toggle";
 import { cn } from "@/lib/utils";
 
 export function MobileNav({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
@@ -14,6 +15,10 @@ export function MobileNav({ open, onOpenChange }: { open: boolean; onOpenChange:
           <SheetTitle className="font-display text-2xl">Menu</SheetTitle>
         </SheetHeader>
         <div className="flex-1 overflow-y-auto px-2 py-2">
+          <div className="px-3 pt-2 pb-4 border-b border-cream-line">
+            <p className="text-[11px] uppercase tracking-widest text-ink-soft mb-2">Affichage des prix</p>
+            <CustomerModeToggle layoutId="customer-mode-mobile" className="w-fit" />
+          </div>
           <Accordion type="single" collapsible>
             {NAV_ITEMS.map((item) =>
               item.columns ? (
@@ -51,6 +56,15 @@ export function MobileNav({ open, onOpenChange }: { open: boolean; onOpenChange:
               )
             )}
           </Accordion>
+          <div className="border-b border-cream-line">
+            <Link
+              href="/professionnels"
+              onClick={() => onOpenChange(false)}
+              className="flex px-3 py-4 text-base text-gold-dark"
+            >
+              Espace professionnels
+            </Link>
+          </div>
         </div>
       </SheetContent>
     </Sheet>

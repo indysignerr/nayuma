@@ -6,7 +6,7 @@ import Link from "next/link";
 import { X, Search } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { ProductPreview } from "@/lib/shopify/types";
-import { formatMoney } from "@/lib/shopify/format";
+import { Price } from "@/components/ui/price";
 
 export function SearchOverlay({
   open,
@@ -72,7 +72,11 @@ export function SearchOverlay({
                       </div>
                       <div>
                         <p className="text-sm group-hover:text-gold-dark transition-colors">{p.title}</p>
-                        {p.variants[0] && <p className="text-xs text-ink-soft">{formatMoney(p.variants[0].price)}</p>}
+                        {p.variants[0] && (
+                          <p className="text-xs text-ink-soft">
+                            <Price amount={p.variants[0].price.amount} vatRate={p.vatRate} />
+                          </p>
+                        )}
                       </div>
                     </Link>
                   </li>

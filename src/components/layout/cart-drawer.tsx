@@ -3,7 +3,11 @@
 import Image from "next/image";
 import { Minus, Plus, X, Lock } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
+import { useCustomerMode } from "@/lib/customer-mode";
+import { VAT_FOOD } from "@/lib/b2b";
 import { Button } from "@/components/ui/button";
+import { Price } from "@/components/ui/price";
+import { CompanyFields } from "@/components/cart/company-fields";
 import {
   Sheet,
   SheetContent,
@@ -21,6 +25,7 @@ export function CartDrawer() {
     openCart,
     lines,
     subtotal,
+    subtotalHT,
     freeShippingThreshold,
     remainingForFreeShipping,
     updateQuantity,
@@ -29,6 +34,7 @@ export function CartDrawer() {
     checkingOut,
     checkoutError,
   } = useCart();
+  const { isPro } = useCustomerMode();
 
   const progress = Math.min(100, ((freeShippingThreshold - remainingForFreeShipping) / freeShippingThreshold) * 100);
 
@@ -43,8 +49,12 @@ export function CartDrawer() {
           <p className="text-xs text-ink-soft mb-2">
             {remainingForFreeShipping > 0 ? (
               <>
-                Plus que <strong className="text-ink">{formatter.format(remainingForFreeShipping)}</strong> pour la
-                livraison offerte
+                Plus que{" "}
+                <strong className="text-ink">
+                  {formatter.format(remainingForFreeShipping)}
+                  {isPro && " TTC"}
+                </strong>{" "}
+                pour la livraison offerte
               </>
             ) : (
               <span className="text-tea-green font-medium">Livraison offerte débloquée ✓</span>
@@ -62,56 +72,64 @@ export function CartDrawer() {
           {lines.length === 0 ? (
             <p className="text-sm text-ink-soft py-8 text-center">Votre panier est vide pour l&apos;instant.</p>
           ) : (
-            <ul className="flex flex-col gap-5">
-              {lines.map((line) => (
-                <li key={line.variantId} className="flex gap-3">
-                  <div className="size-16 shrink-0 rounded overflow-hidden bg-cream border border-cream-line">
-                    <Image src={line.image} alt={line.title} width={64} height={64} className="size-full object-cover" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2">
-                      <p className="text-sm font-medium leading-tight">{line.title}</p>
-                      <button
-                        onClick={() => removeLine(line.variantId)}
-                        aria-label={`Retirer ${line.title} du panier`}
-                        className="text-ink-soft hover:text-terracotta transition-colors shrink-0"
-                      >
-                        <X className="size-4" />
-                      </button>
+            <>
+              <ul className="flex flex-col gap-5">
+                {lines.map((line) => (
+                  <li key={line.variantId} className="flex gap-3">
+                    <div className="size-16 shrink-0 rounded overflow-hidden bg-cream border border-cream-line">
+                      <Image src={line.image} alt={line.title} width={64} height={64} className="size-full object-cover" />
                     </div>
-                    <p className="text-xs text-ink-soft mt-0.5">{line.variantTitle}</p>
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center gap-1 border border-cream-line rounded">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-sm font-medium leading-tight">{line.title}</p>
                         <button
-                          onClick={() => updateQuantity(line.variantId, line.quantity - 1)}
-                          aria-label="Diminuer la quantité"
-                          className="size-7 flex items-center justify-center hover:bg-cream-deep transition-colors"
+                          onClick={() => removeLine(line.variantId)}
+                          aria-label={`Retirer ${line.title} du panier`}
+                          className="text-ink-soft hover:text-terracotta transition-colors shrink-0"
                         >
-                          <Minus className="size-3" />
-                        </button>
-                        <span className="w-6 text-center text-sm">{line.quantity}</span>
-                        <button
-                          onClick={() => updateQuantity(line.variantId, line.quantity + 1)}
-                          aria-label="Augmenter la quantité"
-                          className="size-7 flex items-center justify-center hover:bg-cream-deep transition-colors"
-                        >
-                          <Plus className="size-3" />
+                          <X className="size-4" />
                         </button>
                       </div>
-                      <span className="text-sm font-medium">{formatter.format(line.unitAmount * line.quantity)}</span>
+                      <p className="text-xs text-ink-soft mt-0.5">{line.variantTitle}</p>
+                      <div className="flex items-center justify-between mt-2">
+                        <div className="flex items-center gap-1 border border-cream-line rounded">
+                          <button
+                            onClick={() => updateQuantity(line.variantId, line.quantity - 1)}
+                            aria-label="Diminuer la quantité"
+                            className="size-7 flex items-center justify-center hover:bg-cream-deep transition-colors"
+                          >
+                            <Minus className="size-3" />
+                          </button>
+                          <span className="w-6 text-center text-sm">{line.quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(line.variantId, line.quantity + 1)}
+                            aria-label="Augmenter la quantité"
+                            className="size-7 flex items-center justify-center hover:bg-cream-deep transition-colors"
+                          >
+                            <Plus className="size-3" />
+                          </button>
+                        </div>
+                        <Price
+                          amount={line.unitAmount * line.quantity}
+                          vatRate={line.vatRate ?? VAT_FOOD}
+                          className="text-sm font-medium"
+                        />
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+              <CompanyFields idPrefix="drawer" className="mt-6 pt-5 border-t border-cream-line" />
+            </>
           )}
         </div>
 
         <SheetFooter className="border-t border-cream-line px-5 py-4 gap-3">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-ink-soft">Sous-total</span>
-            <span className="font-display text-xl">{formatter.format(subtotal)}</span>
+            <span className="text-ink-soft">{isPro ? "Sous-total HT" : "Sous-total"}</span>
+            <span className="font-display text-xl">{formatter.format(isPro ? subtotalHT : subtotal)}</span>
           </div>
+          {isPro && <p className="-mt-2 text-right text-xs text-ink-soft">soit {formatter.format(subtotal)} TTC</p>}
           {checkoutError && <p className="text-xs text-terracotta">{checkoutError}</p>}
           <Button
             size="lg"

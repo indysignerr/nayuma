@@ -10,6 +10,7 @@ const BASE_URL = "https://nayumatea.com";
 const STATIC_ROUTES = [
   "",
   "/fine-tea",
+  "/professionnels",
   "/quiz",
   "/guide-du-the",
   "/journal",

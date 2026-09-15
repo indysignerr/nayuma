@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Minus, Plus, Truck } from "lucide-react";
+import { Coffee, Minus, Plus, Truck } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
-import { formatMoney } from "@/lib/shopify/format";
+import { costPerCup, variantWeightKg } from "@/lib/b2b";
+import { Price } from "@/components/ui/price";
 import { categoryLabel, ACCENT_BG } from "@/lib/accent";
 import { useCart } from "@/lib/cart-context";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,9 @@ export function ProductDetail({ product }: { product: Product }) {
 
   const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0];
   const image = product.images[activeImage] ?? product.images[0];
+  const weightKg = variant ? variantWeightKg(variant.title) : null;
+  const serving =
+    variant && weightKg && product.dosage ? costPerCup(Number(variant.price.amount), weightKg, product.dosage) : null;
 
   useEffect(() => {
     const el = ctaRef.current;
@@ -70,12 +74,27 @@ export function ProductDetail({ product }: { product: Product }) {
       <div>
         <p className="text-xs uppercase tracking-wider text-ink-soft mb-2">{categoryLabel(product)}</p>
         <h1 className="font-display text-4xl mb-3">{product.title}</h1>
-        {variant && <p className="font-display text-3xl mb-6">{formatMoney(variant.price)}</p>}
+        {variant && (
+          <p className="font-display text-3xl mb-6">
+            <Price amount={variant.price.amount} vatRate={product.vatRate} detailed />
+          </p>
+        )}
 
         {product.variants.length === 1 && variant && variant.title !== "Default Title" && (
           <p className="text-sm text-ink-soft mb-6">
             <span className="text-xs uppercase tracking-widest mr-2">Format</span>
             {variant.title}
+          </p>
+        )}
+
+        {serving && weightKg && (
+          <p className="flex items-start gap-2 text-sm text-ink-soft mb-6">
+            <Coffee className="size-4 mt-0.5 text-gold-dark shrink-0" aria-hidden />
+            <span>
+              Environ <Price amount={serving.perCup} vatRate={product.vatRate} className="font-medium text-ink" /> la
+              tasse, soit ~{Math.round(serving.cups / 10) * 10} tasses de {serving.cupMl} ml par{" "}
+              {weightKg === 1 ? "kg" : `${weightKg.toLocaleString("fr-FR")} kg`} au dosage conseillé.
+            </span>
           </p>
         )}
 

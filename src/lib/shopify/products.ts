@@ -2,6 +2,7 @@ import { cache } from "react";
 import sanitizeHtml from "sanitize-html";
 import { shopifyFetch } from "./storefront-client";
 import { accentForProduct } from "@/lib/accent";
+import { isB2BVariant, parseDosage, vatRateFor } from "@/lib/b2b";
 import type { Product } from "./types";
 
 function sanitizeDescription(html: string): string {
@@ -26,6 +27,7 @@ const PRODUCTS_QUERY = `
           title
           vendor
           productType
+          isGiftCard
           tags
           descriptionHtml
           description
@@ -59,6 +61,7 @@ type RawProductNode = {
   title: string;
   vendor: string;
   productType: string;
+  isGiftCard: boolean;
   tags: string[];
   descriptionHtml: string;
   description: string;
@@ -81,15 +84,6 @@ type RawProductNode = {
   };
   collections: { edges: { node: { handle: string } }[] };
 };
-
-// B2B : seuls les formats 1kg sont vendus. Les produits sans variante de poids
-// (coffrets, accessoires) gardent toutes leurs variantes.
-const WEIGHT_PATTERN = /(\d+)\s*(kg|grs?|g)\b/i;
-
-function isB2BVariant(title: string): boolean {
-  const match = title.match(WEIGHT_PATTERN);
-  return !match || (match[1] === "1" && match[2].toLowerCase() === "kg");
-}
 
 function priceBounds(variants: RawProductNode["variants"]["edges"]) {
   const sorted = [...variants].sort((a, b) => Number(a.node.price.amount) - Number(b.node.price.amount));
@@ -128,6 +122,9 @@ function mapProduct(node: RawProductNode): Product {
     collectionHandles: node.collections.edges.map((e) => e.node.handle),
     accent: accentForProduct(base),
     fineTea: node.vendor.trim().toUpperCase() === "FINE TEA",
+    isGiftCard: node.isGiftCard,
+    vatRate: vatRateFor({ productType: node.productType, title: node.title, isGiftCard: node.isGiftCard }),
+    dosage: parseDosage(node.description),
   };
 }
 

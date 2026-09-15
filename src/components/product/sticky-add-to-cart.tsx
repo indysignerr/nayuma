@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { Product, ProductVariant } from "@/lib/shopify/types";
-import { formatMoney } from "@/lib/shopify/format";
+import { Price } from "@/components/ui/price";
 import { Button } from "@/components/ui/button";
 
 export function StickyAddToCart({
@@ -36,7 +36,7 @@ export function StickyAddToCart({
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">{product.title}</p>
               <p className="text-xs text-ink-soft">
-                {formatMoney(variant.price)}
+                <Price amount={variant.price.amount} vatRate={product.vatRate} />
                 {variant.title !== "Default Title" && <span> / {variant.title}</span>}
               </p>
             </div>

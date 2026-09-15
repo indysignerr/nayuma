@@ -1,8 +1,8 @@
-import { Gift, Truck, ShieldCheck, Leaf } from "lucide-react";
+import { Briefcase, Truck, ShieldCheck, Leaf } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 const ITEMS = [
-  { icon: Gift, label: "4 échantillons offerts", desc: "Avec chaque commande" },
+  { icon: Briefcase, label: "Espace professionnels", desc: "Prix HT, devis & échantillons" },
   { icon: Truck, label: "Livraison offerte", desc: "Dès 49€ d'achat" },
   { icon: ShieldCheck, label: "Paiement sécurisé", desc: "Via Shopify Payments" },
   { icon: Leaf, label: "Sourcing tracé", desc: "Du jardin à votre tasse" },

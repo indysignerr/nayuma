@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, Search, User, ShoppingBag } from "lucide-react";
+import { Briefcase, Menu, Search, User, ShoppingBag } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { AnnouncementBar } from "./announcement-bar";
+import { CustomerModeToggle } from "./customer-mode-toggle";
 import { MegaMenu } from "./mega-menu";
 import { MobileNav } from "./mobile-nav";
 import { SearchOverlay } from "./search-overlay";
@@ -70,6 +71,7 @@ export function Header({ products }: { products: ProductPreview[] }) {
             >
               <Search className="size-5" />
             </button>
+            <CustomerModeToggle className="hidden lg:flex ml-2" layoutId="customer-mode-header" />
           </div>
 
           <Link href="/" className="flex justify-center text-ink" aria-label="NAYUMA — Tea & Mood">
@@ -80,6 +82,14 @@ export function Header({ products }: { products: ProductPreview[] }) {
             <button onClick={() => setSearchOpen((v) => !v)} className="lg:hidden size-11 flex items-center justify-center" aria-label="Rechercher">
               <Search className="size-5" />
             </button>
+            <Link
+              href="/professionnels"
+              className="hidden sm:flex size-11 items-center justify-center hover:text-gold-dark transition-colors"
+              aria-label="Espace professionnels"
+              title="Espace professionnels"
+            >
+              <Briefcase className="size-5" />
+            </Link>
             <Link href="/compte" className="hidden sm:flex size-11 items-center justify-center" aria-label="Mon compte">
               <User className="size-5" />
             </Link>

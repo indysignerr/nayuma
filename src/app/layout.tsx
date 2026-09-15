@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Work_Sans } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
+import { CustomerModeProvider } from "@/lib/customer-mode";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/layout/cart-drawer";
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
     template: "%s | NAYUMA Tea & Mood",
   },
   description:
-    "Découvrez NAYUMA, créateur de thés, rooibos, matcha et infusions d'exception. Sélection FINE TEA, échantillons offerts et livraison gratuite dès 49€.",
+    "Découvrez NAYUMA, créateur de thés, rooibos, matcha et infusions d'exception. Sélection FINE TEA, pochettes de 1 kg pour particuliers et professionnels, livraison gratuite dès 49€.",
   openGraph: {
     type: "website",
     locale: "fr_FR",
@@ -59,6 +60,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     variants: p.variants.slice(0, 1),
     accent: p.accent,
     fineTea: p.fineTea,
+    vatRate: p.vatRate,
   }));
 
   return (
@@ -77,13 +79,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }),
           }}
         />
-        <CartProvider>
-          <IntroAnimation />
-          <Header products={productPreviews} />
-          <div className="flex-1">{children}</div>
-          <Footer />
-          <CartDrawer />
-        </CartProvider>
+        <CustomerModeProvider>
+          <CartProvider>
+            <IntroAnimation />
+            <Header products={productPreviews} />
+            <div className="flex-1">{children}</div>
+            <Footer />
+            <CartDrawer />
+          </CartProvider>
+        </CustomerModeProvider>
       </body>
     </html>
   );

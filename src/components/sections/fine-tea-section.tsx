@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getFineTeaProducts } from "@/lib/shopify/products";
-import { formatMoney } from "@/lib/shopify/format";
+import { Price } from "@/components/ui/price";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export async function FineTeaSection() {
@@ -47,7 +47,11 @@ export async function FineTeaSection() {
                   )}
                 </div>
                 <p className="font-display text-base mt-3 group-hover:text-gold-dark transition-colors">{p.title}</p>
-                {p.variants[0] && <p className="text-xs text-ink-soft">{formatMoney(p.variants[0].price)}</p>}
+                {p.variants[0] && (
+                  <p className="text-xs text-ink-soft">
+                    <Price amount={p.variants[0].price.amount} vatRate={p.vatRate} />
+                  </p>
+                )}
               </Link>
             </ScrollReveal>
           ))}

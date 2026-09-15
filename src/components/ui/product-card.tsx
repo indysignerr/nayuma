@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
-import { formatMoney } from "@/lib/shopify/format";
+import { Price } from "@/components/ui/price";
 import { ACCENT_BG, categoryLabel } from "@/lib/accent";
 import { useCart } from "@/lib/cart-context";
 import { cn } from "@/lib/utils";
@@ -55,7 +55,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
         </Link>
         {defaultVariant && (
           <p className="text-sm font-medium mt-0.5">
-            {formatMoney(defaultVariant.price)}
+            <Price amount={defaultVariant.price.amount} vatRate={product.vatRate} />
             {defaultVariant.title !== "Default Title" && <span className="text-ink-soft"> / {defaultVariant.title}</span>}
           </p>
         )}

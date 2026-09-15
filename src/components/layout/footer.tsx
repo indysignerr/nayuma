@@ -17,6 +17,7 @@ const COLUMNS = [
   {
     title: "Service client",
     links: [
+      { label: "Espace professionnels", href: "/professionnels" },
       { label: "Contact", href: "/contact" },
       { label: "Livraison & retours", href: "/livraison-retours" },
       { label: "Foire aux questions", href: "/faq" },

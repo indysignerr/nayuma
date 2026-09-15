@@ -4,12 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Minus, Plus, X, Lock } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
+import { useCustomerMode } from "@/lib/customer-mode";
+import { VAT_FOOD } from "@/lib/b2b";
 import { Button } from "@/components/ui/button";
+import { Price } from "@/components/ui/price";
+import { CompanyFields } from "@/components/cart/company-fields";
 
 const formatter = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
 
 export default function PanierPage() {
-  const { lines, subtotal, updateQuantity, removeLine, checkout, checkingOut, checkoutError } = useCart();
+  const { lines, subtotal, subtotalHT, updateQuantity, removeLine, checkout, checkingOut, checkoutError } = useCart();
+  const { isPro } = useCustomerMode();
 
   return (
     <main className="mx-auto max-w-[1240px] px-6 py-16 min-h-[60vh]">
@@ -50,7 +55,7 @@ export default function PanierPage() {
                         <Plus className="size-3" />
                       </button>
                     </div>
-                    <span className="font-medium">{formatter.format(line.unitAmount * line.quantity)}</span>
+                    <Price amount={line.unitAmount * line.quantity} vatRate={line.vatRate ?? VAT_FOOD} className="font-medium" />
                   </div>
                 </div>
               </li>
@@ -59,16 +64,23 @@ export default function PanierPage() {
 
           <aside className="bg-cream-card border border-cream-line rounded p-6 h-fit sticky top-28">
             <h2 className="font-display text-2xl mb-4">Résumé</h2>
+            <CompanyFields idPrefix="panier" className="mb-6 pb-6 border-b border-cream-line" />
             <div className="flex justify-between text-sm mb-2">
-              <span className="text-ink-soft">Sous-total</span>
-              <span>{formatter.format(subtotal)}</span>
+              <span className="text-ink-soft">{isPro ? "Sous-total HT" : "Sous-total"}</span>
+              <span>{formatter.format(isPro ? subtotalHT : subtotal)}</span>
             </div>
+            {isPro && (
+              <div className="flex justify-between text-sm mb-2">
+                <span className="text-ink-soft">TVA</span>
+                <span>{formatter.format(subtotal - subtotalHT)}</span>
+              </div>
+            )}
             <div className="flex justify-between text-sm mb-4">
               <span className="text-ink-soft">Livraison</span>
               <span>{subtotal >= 49 ? "Offerte" : "Calculée à l'étape suivante"}</span>
             </div>
             <div className="flex justify-between font-display text-xl mb-6 pt-4 border-t border-cream-line">
-              <span>Total</span>
+              <span>{isPro ? "Total TTC" : "Total"}</span>
               <span>{formatter.format(subtotal)}</span>
             </div>
             {checkoutError && <p className="text-xs text-terracotta mb-3">{checkoutError}</p>}

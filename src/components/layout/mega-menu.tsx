@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import type { NavItem } from "@/lib/nav-config";
 import type { ProductPreview } from "@/lib/shopify/types";
-import { formatMoney } from "@/lib/shopify/format";
+import { Price } from "@/components/ui/price";
 
 export function MegaMenu({ item, products, onNavigate }: { item: NavItem; products: ProductPreview[]; onNavigate: () => void }) {
   const shouldReduceMotion = useReducedMotion();
@@ -57,7 +57,11 @@ export function MegaMenu({ item, products, onNavigate }: { item: NavItem; produc
                   )}
                 </div>
                 <p className="text-xs mt-2 group-hover:text-gold-dark transition-colors">{p.title}</p>
-                {p.variants[0] && <p className="text-xs text-ink-soft">{formatMoney(p.variants[0].price)}</p>}
+                {p.variants[0] && (
+                  <p className="text-xs text-ink-soft">
+                    <Price amount={p.variants[0].price.amount} vatRate={p.vatRate} />
+                  </p>
+                )}
               </Link>
             ))}
           </div>
