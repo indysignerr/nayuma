@@ -72,6 +72,13 @@ export function ProductDetail({ product }: { product: Product }) {
         <h1 className="font-display text-4xl mb-3">{product.title}</h1>
         {variant && <p className="font-display text-3xl mb-6">{formatMoney(variant.price)}</p>}
 
+        {product.variants.length === 1 && variant && variant.title !== "Default Title" && (
+          <p className="text-sm text-ink-soft mb-6">
+            <span className="text-xs uppercase tracking-widest mr-2">Format</span>
+            {variant.title}
+          </p>
+        )}
+
         {product.variants.length > 1 && (
           <div className="mb-6">
             <p className="text-xs uppercase tracking-widest text-ink-soft mb-3">Format</p>

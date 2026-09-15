@@ -82,12 +82,29 @@ type RawProductNode = {
   collections: { edges: { node: { handle: string } }[] };
 };
 
+// B2B : seuls les formats 1kg sont vendus. Les produits sans variante de poids
+// (coffrets, accessoires) gardent toutes leurs variantes.
+const WEIGHT_PATTERN = /(\d+)\s*(kg|grs?|g)\b/i;
+
+function isB2BVariant(title: string): boolean {
+  const match = title.match(WEIGHT_PATTERN);
+  return !match || (match[1] === "1" && match[2].toLowerCase() === "kg");
+}
+
+function priceBounds(variants: RawProductNode["variants"]["edges"]) {
+  const sorted = [...variants].sort((a, b) => Number(a.node.price.amount) - Number(b.node.price.amount));
+  return { min: sorted[0].node.price, max: sorted[sorted.length - 1].node.price };
+}
+
 function mapProduct(node: RawProductNode): Product {
   const base = {
     productType: node.productType,
     vendor: node.vendor,
     tags: node.tags,
   };
+  const b2bVariants = node.variants.edges.filter((e) => isB2BVariant(e.node.title));
+  const variants = b2bVariants.length > 0 ? b2bVariants : node.variants.edges;
+  const prices = variants.length > 0 ? priceBounds(variants) : null;
   return {
     id: node.id,
     handle: node.handle,
@@ -98,7 +115,7 @@ function mapProduct(node: RawProductNode): Product {
     descriptionHtml: sanitizeDescription(node.descriptionHtml),
     description: node.description,
     images: node.images.edges.map((e) => e.node),
-    variants: node.variants.edges.map((e) => ({
+    variants: variants.map((e) => ({
       id: e.node.id,
       title: e.node.title,
       price: e.node.price,
@@ -106,8 +123,8 @@ function mapProduct(node: RawProductNode): Product {
       availableForSale: e.node.availableForSale,
       selectedOptions: e.node.selectedOptions,
     })),
-    minPrice: node.priceRange.minVariantPrice,
-    maxPrice: node.priceRange.maxVariantPrice,
+    minPrice: prices?.min ?? node.priceRange.minVariantPrice,
+    maxPrice: prices?.max ?? node.priceRange.maxVariantPrice,
     collectionHandles: node.collections.edges.map((e) => e.node.handle),
     accent: accentForProduct(base),
     fineTea: node.vendor.trim().toUpperCase() === "FINE TEA",

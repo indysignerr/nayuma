@@ -32,7 +32,8 @@ type CartContextValue = {
 };
 
 const FREE_SHIPPING_THRESHOLD = 49;
-const STORAGE_KEY = "nayuma-cart";
+// Clé versionnée : invalide les paniers B2C (100g/500g) enregistrés avant le passage en B2B.
+const STORAGE_KEY = "nayuma-cart-b2b";
 
 const CartContext = createContext<CartContextValue | null>(null);
 

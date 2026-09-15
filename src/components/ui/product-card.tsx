@@ -56,7 +56,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
         {defaultVariant && (
           <p className="text-sm font-medium mt-0.5">
             {formatMoney(defaultVariant.price)}
-            {product.variants.length > 1 && <span className="text-ink-soft"> / {defaultVariant.title}</span>}
+            {defaultVariant.title !== "Default Title" && <span className="text-ink-soft"> / {defaultVariant.title}</span>}
           </p>
         )}
       </div>
