@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Work_Sans } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
 import { CustomerModeProvider } from "@/lib/customer-mode";
+import { FREE_SHIPPING_THRESHOLD_LABEL } from "@/lib/shipping";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/layout/cart-drawer";
@@ -28,8 +29,7 @@ export const metadata: Metadata = {
     default: "NAYUMA — Tea & Mood | Thés, Rooibos, Matcha & Infusions d'exception",
     template: "%s | NAYUMA Tea & Mood",
   },
-  description:
-    "Découvrez NAYUMA, créateur de thés, rooibos, matcha et infusions d'exception. Sélection FINE TEA, pochettes de 1 kg pour particuliers et professionnels, livraison gratuite dès 49€.",
+  description: `Découvrez NAYUMA, créateur de thés, rooibos, matcha et infusions d'exception. Sélection FINE TEA, pochettes de 1 kg pour particuliers et professionnels, livraison gratuite dès ${FREE_SHIPPING_THRESHOLD_LABEL}.`,
   openGraph: {
     type: "website",
     locale: "fr_FR",

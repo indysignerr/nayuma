@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { FREE_SHIPPING_LABEL } from "@/lib/shipping";
 
 const MESSAGES: { text: string; href?: string }[] = [
-  { text: "Livraison offerte dès 49 € d'achat" },
+  { text: FREE_SHIPPING_LABEL },
   { text: "Professionnels : prix HT, devis & échantillons", href: "/professionnels" },
   { text: "Paiement 100% sécurisé" },
 ];

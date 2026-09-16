@@ -1,12 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import { Minus, Plus, X, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { useCustomerMode } from "@/lib/customer-mode";
-import { VAT_FOOD } from "@/lib/b2b";
 import { Button } from "@/components/ui/button";
-import { Price } from "@/components/ui/price";
+import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CompanyFields } from "@/components/cart/company-fields";
 import {
   Sheet,
@@ -28,8 +26,7 @@ export function CartDrawer() {
     subtotalHT,
     freeShippingThreshold,
     remainingForFreeShipping,
-    updateQuantity,
-    removeLine,
+    hasUnavailableLines,
     checkout,
     checkingOut,
     checkoutError,
@@ -45,28 +42,34 @@ export function CartDrawer() {
           <SheetTitle className="font-display text-2xl">Votre panier</SheetTitle>
         </SheetHeader>
 
-        <div className="px-5 py-4 border-b border-cream-line">
-          <p className="text-xs text-ink-soft mb-2">
-            {remainingForFreeShipping > 0 ? (
-              <>
-                Plus que{" "}
-                <strong className="text-ink">
-                  {formatter.format(remainingForFreeShipping)}
-                  {isPro && " TTC"}
-                </strong>{" "}
-                pour la livraison offerte
-              </>
-            ) : (
-              <span className="text-tea-green font-medium">Livraison offerte débloquée ✓</span>
-            )}
-          </p>
-          <div className="h-1.5 w-full rounded-full bg-cream-deep overflow-hidden">
+        {lines.length > 0 && (
+          <div className="px-5 py-4 border-b border-cream-line">
+            <p className="text-xs text-ink-soft mb-2" aria-live="polite">
+              {remainingForFreeShipping > 0 ? (
+                <>
+                  Plus que{" "}
+                  <strong className="text-ink">
+                    {formatter.format(remainingForFreeShipping)}
+                    {isPro && " TTC"}
+                  </strong>{" "}
+                  pour la livraison offerte
+                </>
+              ) : (
+                <span className="text-tea-green font-medium">Livraison offerte débloquée ✓</span>
+              )}
+            </p>
             <div
-              className="h-full bg-gold-dark transition-all duration-500"
-              style={{ width: `${progress}%` }}
-            />
+              role="progressbar"
+              aria-label="Progression vers la livraison offerte"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(progress)}
+              className="h-1.5 w-full rounded-full bg-cream-deep overflow-hidden"
+            >
+              <div className="h-full bg-gold-dark transition-all duration-500" style={{ width: `${progress}%` }} />
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {lines.length === 0 ? (
@@ -75,48 +78,7 @@ export function CartDrawer() {
             <>
               <ul className="flex flex-col gap-5">
                 {lines.map((line) => (
-                  <li key={line.variantId} className="flex gap-3">
-                    <div className="size-16 shrink-0 rounded overflow-hidden bg-cream border border-cream-line">
-                      <Image src={line.image} alt={line.title} width={64} height={64} className="size-full object-cover" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="text-sm font-medium leading-tight">{line.title}</p>
-                        <button
-                          onClick={() => removeLine(line.variantId)}
-                          aria-label={`Retirer ${line.title} du panier`}
-                          className="text-ink-soft hover:text-terracotta transition-colors shrink-0"
-                        >
-                          <X className="size-4" />
-                        </button>
-                      </div>
-                      <p className="text-xs text-ink-soft mt-0.5">{line.variantTitle}</p>
-                      <div className="flex items-center justify-between mt-2">
-                        <div className="flex items-center gap-1 border border-cream-line rounded">
-                          <button
-                            onClick={() => updateQuantity(line.variantId, line.quantity - 1)}
-                            aria-label="Diminuer la quantité"
-                            className="size-7 flex items-center justify-center hover:bg-cream-deep transition-colors"
-                          >
-                            <Minus className="size-3" />
-                          </button>
-                          <span className="w-6 text-center text-sm">{line.quantity}</span>
-                          <button
-                            onClick={() => updateQuantity(line.variantId, line.quantity + 1)}
-                            aria-label="Augmenter la quantité"
-                            className="size-7 flex items-center justify-center hover:bg-cream-deep transition-colors"
-                          >
-                            <Plus className="size-3" />
-                          </button>
-                        </div>
-                        <Price
-                          amount={line.unitAmount * line.quantity}
-                          vatRate={line.vatRate ?? VAT_FOOD}
-                          className="text-sm font-medium"
-                        />
-                      </div>
-                    </div>
-                  </li>
+                  <CartLineItem key={line.variantId} line={line} onNavigate={closeCart} />
                 ))}
               </ul>
               <CompanyFields idPrefix="drawer" className="mt-6 pt-5 border-t border-cream-line" />
@@ -130,16 +92,24 @@ export function CartDrawer() {
             <span className="font-display text-xl">{formatter.format(isPro ? subtotalHT : subtotal)}</span>
           </div>
           {isPro && <p className="-mt-2 text-right text-xs text-ink-soft">soit {formatter.format(subtotal)} TTC</p>}
-          {checkoutError && <p className="text-xs text-terracotta">{checkoutError}</p>}
+          {checkoutError && (
+            <p role="alert" className="text-xs text-terracotta">
+              {checkoutError}
+            </p>
+          )}
           <Button
             size="lg"
-            disabled={lines.length === 0 || checkingOut}
+            disabled={lines.length === 0 || checkingOut || hasUnavailableLines}
             onClick={checkout}
-            className="w-full rounded-sm gap-2"
+            className="w-full rounded-sm gap-2 min-h-11"
           >
             <Lock className="size-4" /> {checkingOut ? "Redirection..." : "Passer commande"}
           </Button>
-          <button onClick={closeCart} className="text-xs text-center text-ink-soft hover:text-ink underline underline-offset-4">
+          <button
+            type="button"
+            onClick={closeCart}
+            className="min-h-11 text-xs text-center text-ink-soft hover:text-ink underline underline-offset-4"
+          >
             Continuer mes achats
           </button>
         </SheetFooter>

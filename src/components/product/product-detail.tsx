@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Coffee, Minus, Plus, Truck } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
 import { costPerCup, variantWeightKg } from "@/lib/b2b";
+import { FREE_SHIPPING_LABEL, STANDARD_SHIPPING_LABEL } from "@/lib/shipping";
 import { Price } from "@/components/ui/price";
 import { categoryLabel, ACCENT_BG } from "@/lib/accent";
 import { useCart } from "@/lib/cart-context";
@@ -139,7 +140,7 @@ export function ProductDetail({ product }: { product: Product }) {
         </div>
 
         <p className="flex items-center gap-2 text-xs text-ink-soft mb-8">
-          <Truck className="size-4" /> Livraison offerte dès 49€ d&apos;achat
+          <Truck className="size-4" /> {FREE_SHIPPING_LABEL}
         </p>
 
         <Accordion type="single" collapsible defaultValue="description">
@@ -152,8 +153,8 @@ export function ProductDetail({ product }: { product: Product }) {
           <AccordionItem value="livraison">
             <AccordionTrigger>Livraison</AccordionTrigger>
             <AccordionContent className="text-ink-soft leading-relaxed">
-              Expédition sous 24h ouvrées. Livraison offerte dès 49€ d&apos;achat, sinon 4,90€. Livraison standard 2 à
-              4 jours ouvrés.
+              Expédition sous 24h ouvrées. {FREE_SHIPPING_LABEL}, sinon à partir de {STANDARD_SHIPPING_LABEL}.
+              Livraison standard en 2 à 4 jours ouvrés.
             </AccordionContent>
           </AccordionItem>
         </Accordion>

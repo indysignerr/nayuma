@@ -1,9 +1,10 @@
 import { Briefcase, Truck, ShieldCheck, Leaf } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { FREE_SHIPPING_THRESHOLD_LABEL } from "@/lib/shipping";
 
 const ITEMS = [
   { icon: Briefcase, label: "Espace professionnels", desc: "Prix HT, devis & échantillons" },
-  { icon: Truck, label: "Livraison offerte", desc: "Dès 49€ d'achat" },
+  { icon: Truck, label: "Livraison offerte", desc: `Dès ${FREE_SHIPPING_THRESHOLD_LABEL} d'achat` },
   { icon: ShieldCheck, label: "Paiement sécurisé", desc: "Via Shopify Payments" },
   { icon: Leaf, label: "Sourcing tracé", desc: "Du jardin à votre tasse" },
 ];

@@ -96,8 +96,8 @@ export function Header({ products }: { products: ProductPreview[] }) {
             <button onClick={openCart} className="relative size-11 flex items-center justify-center" aria-label="Voir le panier">
               <ShoppingBag className="size-5" />
               {totalQuantity > 0 && (
-                <span className="absolute top-1.5 right-1.5 flex size-4 items-center justify-center rounded-full bg-terracotta text-cream text-[10px]">
-                  {totalQuantity}
+                <span className="absolute top-1 right-0.5 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-terracotta text-cream text-[10px] tabular-nums">
+                  {totalQuantity > 99 ? "99+" : totalQuantity}
                 </span>
               )}
             </button>

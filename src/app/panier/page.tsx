@@ -1,19 +1,27 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { Minus, Plus, X, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { useCustomerMode } from "@/lib/customer-mode";
-import { VAT_FOOD } from "@/lib/b2b";
+import { STANDARD_SHIPPING_LABEL } from "@/lib/shipping";
 import { Button } from "@/components/ui/button";
-import { Price } from "@/components/ui/price";
+import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CompanyFields } from "@/components/cart/company-fields";
 
 const formatter = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
 
 export default function PanierPage() {
-  const { lines, subtotal, subtotalHT, updateQuantity, removeLine, checkout, checkingOut, checkoutError } = useCart();
+  const {
+    lines,
+    subtotal,
+    subtotalHT,
+    remainingForFreeShipping,
+    hasUnavailableLines,
+    checkout,
+    checkingOut,
+    checkoutError,
+  } = useCart();
   const { isPro } = useCustomerMode();
 
   return (
@@ -23,46 +31,27 @@ export default function PanierPage() {
       {lines.length === 0 ? (
         <div className="text-center py-20">
           <p className="text-ink-soft mb-6">Votre panier est vide.</p>
-          <Button asChild className="rounded-sm">
+          <Button asChild className="rounded-sm min-h-11">
             <Link href="/collections/thes">Découvrir nos thés</Link>
           </Button>
         </div>
       ) : (
         <div className="grid md:grid-cols-[1fr_360px] gap-12">
-          <ul className="flex flex-col divide-y divide-cream-line">
-            {lines.map((line) => (
-              <li key={line.variantId} className="flex gap-4 py-6">
-                <div className="size-24 shrink-0 rounded overflow-hidden bg-cream-card border border-cream-line">
-                  <Image src={line.image} alt={line.title} width={96} height={96} className="size-full object-cover" />
-                </div>
-                <div className="flex-1 flex flex-col justify-between">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="font-medium">{line.title}</p>
-                      <p className="text-sm text-ink-soft">{line.variantTitle}</p>
-                    </div>
-                    <button onClick={() => removeLine(line.variantId)} className="text-ink-soft hover:text-terracotta">
-                      <X className="size-4" />
-                    </button>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1 border border-cream-line rounded">
-                      <button onClick={() => updateQuantity(line.variantId, line.quantity - 1)} className="size-8 flex items-center justify-center hover:bg-cream-deep">
-                        <Minus className="size-3" />
-                      </button>
-                      <span className="w-8 text-center text-sm">{line.quantity}</span>
-                      <button onClick={() => updateQuantity(line.variantId, line.quantity + 1)} className="size-8 flex items-center justify-center hover:bg-cream-deep">
-                        <Plus className="size-3" />
-                      </button>
-                    </div>
-                    <Price amount={line.unitAmount * line.quantity} vatRate={line.vatRate ?? VAT_FOOD} className="font-medium" />
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <div>
+            <ul className="flex flex-col divide-y divide-cream-line">
+              {lines.map((line) => (
+                <CartLineItem key={line.variantId} line={line} size="large" />
+              ))}
+            </ul>
+            <Link
+              href="/collections/thes"
+              className="inline-flex min-h-11 items-center text-sm text-ink-soft underline underline-offset-4 hover:text-ink"
+            >
+              Continuer mes achats
+            </Link>
+          </div>
 
-          <aside className="bg-cream-card border border-cream-line rounded p-6 h-fit sticky top-28">
+          <aside className="bg-cream-card border border-cream-line rounded p-6 h-fit md:sticky md:top-44">
             <h2 className="font-display text-2xl mb-4">Résumé</h2>
             <CompanyFields idPrefix="panier" className="mb-6 pb-6 border-b border-cream-line" />
             <div className="flex justify-between text-sm mb-2">
@@ -75,16 +64,34 @@ export default function PanierPage() {
                 <span>{formatter.format(subtotal - subtotalHT)}</span>
               </div>
             )}
-            <div className="flex justify-between text-sm mb-4">
+            <div className="flex justify-between gap-4 text-sm mb-1">
               <span className="text-ink-soft">Livraison</span>
-              <span>{subtotal >= 49 ? "Offerte" : "Calculée à l'étape suivante"}</span>
+              <span className="text-right">
+                {remainingForFreeShipping > 0 ? `À partir de ${STANDARD_SHIPPING_LABEL}` : "Offerte"}
+              </span>
             </div>
-            <div className="flex justify-between font-display text-xl mb-6 pt-4 border-t border-cream-line">
+            {remainingForFreeShipping > 0 && (
+              <p className="text-xs text-ink-soft mb-4">
+                Plus que {formatter.format(remainingForFreeShipping)}
+                {isPro && " TTC"} pour la livraison offerte.
+              </p>
+            )}
+            <div className="flex justify-between font-display text-xl mt-4 mb-1 pt-4 border-t border-cream-line">
               <span>{isPro ? "Total TTC" : "Total"}</span>
               <span>{formatter.format(subtotal)}</span>
             </div>
-            {checkoutError && <p className="text-xs text-terracotta mb-3">{checkoutError}</p>}
-            <Button size="lg" className="w-full rounded-sm gap-2" onClick={checkout} disabled={checkingOut}>
+            <p className="text-xs text-ink-soft mb-6">Hors frais de livraison, calculés à l&apos;étape suivante.</p>
+            {checkoutError && (
+              <p role="alert" className="text-xs text-terracotta mb-3">
+                {checkoutError}
+              </p>
+            )}
+            <Button
+              size="lg"
+              className="w-full rounded-sm gap-2 min-h-11"
+              onClick={checkout}
+              disabled={checkingOut || hasUnavailableLines}
+            >
               <Lock className="size-4" /> {checkingOut ? "Redirection..." : "Paiement sécurisé Shopify"}
             </Button>
           </aside>
