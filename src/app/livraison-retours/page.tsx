@@ -18,10 +18,9 @@ export default function LivraisonRetoursPage() {
       </p>
 
       <h2>Délais de préparation et d&apos;expédition</h2>
-      <p>Les commandes sont généralement préparées et expédiées sous 2 à 5 jours ouvrés après validation du paiement.</p>
       <p>
-        Les délais de livraison estimés sont généralement de 8 à 10 jours ouvrés, selon la destination et le mode
-        de livraison sélectionné.
+        Les commandes sont expédiées sous 8 à 10 jours ouvrés après validation du paiement. Le délai de livraison
+        dépend ensuite de la destination et du mode de livraison sélectionné.
       </p>
       <p>
         Ces délais sont donnés à titre indicatif et peuvent varier en fonction des périodes de forte activité, des

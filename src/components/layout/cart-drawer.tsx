@@ -2,7 +2,7 @@
 
 import { Lock } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
-import { useCustomerMode } from "@/lib/customer-mode";
+import { SHOPIFY_AMOUNT_UNIT } from "@/lib/b2b";
 import { Button } from "@/components/ui/button";
 import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CompanyFields } from "@/components/cart/company-fields";
@@ -22,8 +22,8 @@ export function CartDrawer() {
     closeCart,
     openCart,
     lines,
-    subtotal,
     subtotalHT,
+    subtotalTTC,
     freeShippingThreshold,
     remainingForFreeShipping,
     hasUnavailableLines,
@@ -31,7 +31,6 @@ export function CartDrawer() {
     checkingOut,
     checkoutError,
   } = useCart();
-  const { isPro } = useCustomerMode();
 
   const progress = Math.min(100, ((freeShippingThreshold - remainingForFreeShipping) / freeShippingThreshold) * 100);
 
@@ -49,8 +48,7 @@ export function CartDrawer() {
                 <>
                   Plus que{" "}
                   <strong className="text-ink">
-                    {formatter.format(remainingForFreeShipping)}
-                    {isPro && " TTC"}
+                    {formatter.format(remainingForFreeShipping)} {SHOPIFY_AMOUNT_UNIT}
                   </strong>{" "}
                   pour la livraison offerte
                 </>
@@ -88,10 +86,12 @@ export function CartDrawer() {
 
         <SheetFooter className="border-t border-cream-line px-5 py-4 gap-3">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-ink-soft">{isPro ? "Sous-total HT" : "Sous-total"}</span>
-            <span className="font-display text-xl">{formatter.format(isPro ? subtotalHT : subtotal)}</span>
+            <span className="text-ink-soft">Sous-total HT</span>
+            <span className="font-display text-xl">{formatter.format(subtotalHT)}</span>
           </div>
-          {isPro && <p className="-mt-2 text-right text-xs text-ink-soft">soit {formatter.format(subtotal)} TTC</p>}
+          <p className="-mt-2 text-right text-xs text-ink-soft">
+            + TVA ajoutée au paiement, soit {formatter.format(subtotalTTC)} TTC
+          </p>
           {checkoutError && (
             <p role="alert" className="text-xs text-terracotta">
               {checkoutError}

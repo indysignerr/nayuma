@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Coffee, Minus, Plus, Truck } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
 import { costPerCup, variantWeightKg } from "@/lib/b2b";
-import { FREE_SHIPPING_LABEL, STANDARD_SHIPPING_LABEL } from "@/lib/shipping";
+import { FREE_SHIPPING_LABEL, SHIPPING_DELAY_LABEL, STANDARD_SHIPPING_LABEL } from "@/lib/shipping";
 import { Price } from "@/components/ui/price";
 import { categoryLabel, ACCENT_BG } from "@/lib/accent";
 import { useCart } from "@/lib/cart-context";
@@ -153,8 +153,8 @@ export function ProductDetail({ product }: { product: Product }) {
           <AccordionItem value="livraison">
             <AccordionTrigger>Livraison</AccordionTrigger>
             <AccordionContent className="text-ink-soft leading-relaxed">
-              Expédition sous 24h ouvrées. {FREE_SHIPPING_LABEL}, sinon à partir de {STANDARD_SHIPPING_LABEL}.
-              Livraison standard en 2 à 4 jours ouvrés.
+              Expédition sous {SHIPPING_DELAY_LABEL}. {FREE_SHIPPING_LABEL}, sinon à partir de{" "}
+              {STANDARD_SHIPPING_LABEL}.
             </AccordionContent>
           </AccordionItem>
         </Accordion>

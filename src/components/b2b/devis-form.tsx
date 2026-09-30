@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,8 @@ const ACTIVITIES = [
   "Autre",
 ];
 
-const REQUESTS = ["Demande de devis", "Demande d'échantillons", "Autre question"];
+const FAIRE_REQUEST = "Commander via Faire (recevoir le lien Faire Direct)";
+const REQUESTS = ["Demande de devis", "Demande d'échantillons", FAIRE_REQUEST, "Autre question"];
 
 const fieldClass =
   "w-full rounded-sm border border-cream-line bg-cream px-3 text-sm outline-none transition-colors placeholder:text-ink-soft/60 focus-visible:border-ink focus-visible:ring-2 focus-visible:ring-gold/40";
@@ -43,6 +44,12 @@ function mailtoFor(data: Record<string, string>): string {
 export function DevisForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [fallbackHref, setFallbackHref] = useState(`mailto:${CONTACT_EMAIL}`);
+  const [request, setRequest] = useState(REQUESTS[0]);
+
+  // Lien "#devis-faire" depuis l'espace pro : l'objet Faire est présélectionné.
+  useEffect(() => {
+    if (window.location.hash === "#devis-faire") setRequest(FAIRE_REQUEST);
+  }, []);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -120,7 +127,13 @@ export function DevisForm() {
         <label htmlFor="devis-request" className={labelClass}>
           Objet
         </label>
-        <select id="devis-request" name="request" defaultValue={REQUESTS[0]} className={`${fieldClass} h-11`}>
+        <select
+          id="devis-request"
+          name="request"
+          value={request}
+          onChange={(e) => setRequest(e.target.value)}
+          className={`${fieldClass} h-11`}
+        >
           {REQUESTS.map((request) => (
             <option key={request}>{request}</option>
           ))}

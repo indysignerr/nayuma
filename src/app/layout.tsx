@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Work_Sans } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
-import { CustomerModeProvider } from "@/lib/customer-mode";
 import { FREE_SHIPPING_THRESHOLD_LABEL } from "@/lib/shipping";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -79,15 +78,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }),
           }}
         />
-        <CustomerModeProvider>
-          <CartProvider>
-            <IntroAnimation />
-            <Header products={productPreviews} />
-            <div className="flex-1">{children}</div>
-            <Footer />
-            <CartDrawer />
-          </CartProvider>
-        </CustomerModeProvider>
+        <CartProvider>
+          <IntroAnimation />
+          <Header products={productPreviews} />
+          <div className="flex-1">{children}</div>
+          <Footer />
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );

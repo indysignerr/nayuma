@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Lock } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
-import { useCustomerMode } from "@/lib/customer-mode";
+import { SHOPIFY_AMOUNT_UNIT } from "@/lib/b2b";
 import { STANDARD_SHIPPING_LABEL } from "@/lib/shipping";
 import { Button } from "@/components/ui/button";
 import { CartLineItem } from "@/components/cart/cart-line-item";
@@ -14,15 +14,14 @@ const formatter = new Intl.NumberFormat("fr-FR", { style: "currency", currency: 
 export default function PanierPage() {
   const {
     lines,
-    subtotal,
     subtotalHT,
+    subtotalTTC,
     remainingForFreeShipping,
     hasUnavailableLines,
     checkout,
     checkingOut,
     checkoutError,
   } = useCart();
-  const { isPro } = useCustomerMode();
 
   return (
     <main className="mx-auto max-w-[1240px] px-6 py-16 min-h-[60vh]">
@@ -55,15 +54,13 @@ export default function PanierPage() {
             <h2 className="font-display text-2xl mb-4">Résumé</h2>
             <CompanyFields idPrefix="panier" className="mb-6 pb-6 border-b border-cream-line" />
             <div className="flex justify-between text-sm mb-2">
-              <span className="text-ink-soft">{isPro ? "Sous-total HT" : "Sous-total"}</span>
-              <span>{formatter.format(isPro ? subtotalHT : subtotal)}</span>
+              <span className="text-ink-soft">Sous-total HT</span>
+              <span>{formatter.format(subtotalHT)}</span>
             </div>
-            {isPro && (
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-ink-soft">TVA</span>
-                <span>{formatter.format(subtotal - subtotalHT)}</span>
-              </div>
-            )}
+            <div className="flex justify-between text-sm mb-2">
+              <span className="text-ink-soft">TVA (ajoutée au paiement)</span>
+              <span>{formatter.format(subtotalTTC - subtotalHT)}</span>
+            </div>
             <div className="flex justify-between gap-4 text-sm mb-1">
               <span className="text-ink-soft">Livraison</span>
               <span className="text-right">
@@ -72,13 +69,12 @@ export default function PanierPage() {
             </div>
             {remainingForFreeShipping > 0 && (
               <p className="text-xs text-ink-soft mb-4">
-                Plus que {formatter.format(remainingForFreeShipping)}
-                {isPro && " TTC"} pour la livraison offerte.
+                Plus que {formatter.format(remainingForFreeShipping)} {SHOPIFY_AMOUNT_UNIT} pour la livraison offerte.
               </p>
             )}
             <div className="flex justify-between font-display text-xl mt-4 mb-1 pt-4 border-t border-cream-line">
-              <span>{isPro ? "Total TTC" : "Total"}</span>
-              <span>{formatter.format(subtotal)}</span>
+              <span>Total TTC</span>
+              <span>{formatter.format(subtotalTTC)}</span>
             </div>
             <p className="text-xs text-ink-soft mb-6">Hors frais de livraison, calculés à l&apos;étape suivante.</p>
             {checkoutError && (

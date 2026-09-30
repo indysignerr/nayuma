@@ -12,6 +12,8 @@
   --color-gold-light: #d7bd85;
   --color-gold-dark: #7c6236;
   --color-terracotta: #a63f2e;
+  --color-orange: #f07b26;
+  --color-orange-dark: #a8480c;
 
   --color-tea-green: #8a9a5c;
   --color-tea-black: #a9682a;
@@ -58,6 +60,8 @@
   --color-gold-light: var(--color-gold-light);
   --color-gold-dark: var(--color-gold-dark);
   --color-terracotta: var(--color-terracotta);
+  --color-orange: var(--color-orange);
+  --color-orange-dark: var(--color-orange-dark);
 
   --color-tea-green: var(--color-tea-green);
   --color-tea-black: var(--color-tea-black);

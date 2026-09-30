@@ -12,9 +12,8 @@ import {
 } from "react";
 import type { Product, ProductVariant } from "@/lib/shopify/types";
 import { shopifyFetch } from "@/lib/shopify/storefront-client";
-import { amountHT, companyErrors, isB2BVariant, normalizeCompanyId, VAT_FOOD, type CompanyInfo } from "@/lib/b2b";
+import { amountHT, amountTTC, companyErrors, isB2BVariant, normalizeCompanyId, VAT_FOOD, type CompanyInfo } from "@/lib/b2b";
 import { FREE_SHIPPING_THRESHOLD } from "@/lib/shipping";
-import { useCustomerMode } from "@/lib/customer-mode";
 
 export type CartLine = {
   variantId: string;
@@ -33,8 +32,10 @@ type CartContextValue = {
   lines: CartLine[];
   isOpen: boolean;
   totalQuantity: number;
+  /** Somme des prix Shopify (sert au seuil de livraison offerte). */
   subtotal: number;
   subtotalHT: number;
+  subtotalTTC: number;
   freeShippingThreshold: number;
   remainingForFreeShipping: number;
   hasUnavailableLines: boolean;
@@ -129,7 +130,6 @@ async function lastCheckoutCompleted(): Promise<boolean> {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const { isPro } = useCustomerMode();
   const [lines, setLines] = useState<CartLine[]>([]);
   const [company, setCompany] = useState<CompanyInfo>(EMPTY_COMPANY);
   const [isOpen, setIsOpen] = useState(false);
@@ -242,7 +242,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setCheckoutError("Un article n'est plus disponible : retirez-le pour continuer.");
       return;
     }
-    if (isPro && Object.keys(companyErrors(company)).length > 0) {
+    if (Object.keys(companyErrors(company)).length > 0) {
       setCheckoutError("Vérifiez le SIRET et le n° de TVA saisis.");
       return;
     }
@@ -250,14 +250,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setCheckoutError(null);
 
     // Visibles sur la commande Shopify ("Détails supplémentaires") pour la facturation.
-    const attributes = isPro
-      ? [
-          { key: "Type de client", value: "Professionnel" },
-          { key: "Raison sociale", value: company.name.trim() },
-          { key: "SIRET", value: normalizeCompanyId(company.siret) },
-          { key: "N° TVA intracommunautaire", value: normalizeCompanyId(company.vatNumber) },
-        ].filter((a) => a.value)
-      : [];
+    const companyAttributes = [
+      { key: "Raison sociale", value: company.name.trim() },
+      { key: "SIRET", value: normalizeCompanyId(company.siret) },
+      { key: "N° TVA intracommunautaire", value: normalizeCompanyId(company.vatNumber) },
+    ].filter((a) => a.value);
+    const attributes =
+      companyAttributes.length > 0 ? [{ key: "Type de client", value: "Professionnel" }, ...companyAttributes] : [];
 
     try {
       const data = await shopifyFetch<{
@@ -287,11 +286,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       );
       setCheckingOut(false);
     }
-  }, [lines, hasUnavailableLines, isPro, company]);
+  }, [lines, hasUnavailableLines, company]);
 
   const subtotal = useMemo(() => lines.reduce((sum, l) => sum + l.unitAmount * l.quantity, 0), [lines]);
   const subtotalHT = useMemo(
     () => lines.reduce((sum, l) => sum + amountHT(l.unitAmount, l.vatRate ?? VAT_FOOD) * l.quantity, 0),
+    [lines]
+  );
+  const subtotalTTC = useMemo(
+    () => lines.reduce((sum, l) => sum + amountTTC(l.unitAmount, l.vatRate ?? VAT_FOOD) * l.quantity, 0),
     [lines]
   );
   const totalQuantity = useMemo(() => lines.reduce((sum, l) => sum + l.quantity, 0), [lines]);
@@ -303,6 +306,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     totalQuantity,
     subtotal,
     subtotalHT,
+    subtotalTTC,
     freeShippingThreshold: FREE_SHIPPING_THRESHOLD,
     remainingForFreeShipping,
     hasUnavailableLines,

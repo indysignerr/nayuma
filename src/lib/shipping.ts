@@ -14,3 +14,4 @@ function euros(amount: number): string {
 export const FREE_SHIPPING_THRESHOLD_LABEL = euros(FREE_SHIPPING_THRESHOLD);
 export const STANDARD_SHIPPING_LABEL = euros(STANDARD_SHIPPING_FEE);
 export const FREE_SHIPPING_LABEL = `Livraison offerte dès ${FREE_SHIPPING_THRESHOLD_LABEL} d'achat`;
+export const SHIPPING_DELAY_LABEL = "8 à 10 jours ouvrés";

@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { FREE_SHIPPING_THRESHOLD_LABEL, STANDARD_SHIPPING_LABEL } from "@/lib/shipping";
+import { FREE_SHIPPING_THRESHOLD_LABEL, SHIPPING_DELAY_LABEL, STANDARD_SHIPPING_LABEL } from "@/lib/shipping";
 
 export const metadata: Metadata = { title: "Foire aux questions" };
 
 const FAQS = [
-  { q: "Quel est le délai de livraison ?", a: "Comptez 2 à 4 jours ouvrés après expédition, elle-même réalisée sous 24h ouvrées." },
+  { q: "Quel est le délai de livraison ?", a: `Les commandes sont expédiées sous ${SHIPPING_DELAY_LABEL} après validation du paiement.` },
   {
     q: "La livraison est-elle offerte ?",
     a: `Oui, dès ${FREE_SHIPPING_THRESHOLD_LABEL} d'achat. En dessous, la livraison standard est à ${STANDARD_SHIPPING_LABEL}.`,
   },
   { q: "Puis-je retourner un produit ?", a: "Oui, sous 14 jours si le produit n'est pas entamé. Voir notre page Livraison & retours." },
-  { q: "Je suis un professionnel, comment commander ?", a: "Choisissez « Pro · HT » dans le sélecteur d'affichage des prix (en haut du site, ou dans le menu sur mobile) : tous les prix passent hors taxes. Renseignez ensuite votre raison sociale, votre SIRET et votre n° de TVA dans le panier pour recevoir une facture au nom de votre société. Pour un devis ou des échantillons, rendez-vous sur notre page Espace professionnels." },
+  {
+    q: "Je suis un professionnel, comment commander ?",
+    a: "Trois possibilités : commander directement sur notre site (prix affichés HT, facture au nom de votre société), ou passer par Faire ou Ankorstore pour bénéficier, selon votre éligibilité, d'un paiement à 60 jours. Tout est détaillé sur notre page Espace professionnels.",
+  },
   { q: "Proposez-vous des cartes cadeaux ?", a: "Oui, disponibles en 25€ et 50€ dans notre collection Coffrets & Accessoires." },
 ];
 

@@ -119,4 +119,5 @@ export const NAV_ITEMS: NavItem[] = [
     ],
   },
   { label: "FINE TEA", href: "/fine-tea", accentClass: "text-gold-dark" },
+  { label: "Quel thé pour moi ?", href: "/quiz", accentClass: "text-orange-dark font-medium" },
 ];

@@ -1,9 +1,9 @@
-import { Briefcase, Truck, ShieldCheck, Leaf } from "lucide-react";
+import { BadgeEuro, Truck, ShieldCheck, Leaf } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { FREE_SHIPPING_THRESHOLD_LABEL } from "@/lib/shipping";
 
 const ITEMS = [
-  { icon: Briefcase, label: "Espace professionnels", desc: "Prix HT, devis & échantillons" },
+  { icon: BadgeEuro, label: "Paiement à 60 jours", desc: "Pour les pros, via Faire ou Ankorstore" },
   { icon: Truck, label: "Livraison offerte", desc: `Dès ${FREE_SHIPPING_THRESHOLD_LABEL} d'achat` },
   { icon: ShieldCheck, label: "Paiement sécurisé", desc: "Via Shopify Payments" },
   { icon: Leaf, label: "Sourcing tracé", desc: "Du jardin à votre tasse" },

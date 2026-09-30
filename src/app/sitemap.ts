@@ -11,6 +11,7 @@ const STATIC_ROUTES = [
   "",
   "/fine-tea",
   "/professionnels",
+  "/professionnels/commande-directe",
   "/quiz",
   "/guide-du-the",
   "/journal",

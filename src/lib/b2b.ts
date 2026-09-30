@@ -20,7 +20,11 @@ export function isB2BVariant(title: string): boolean {
   return weight === null || weight === 1;
 }
 
-// Les prix Shopify sont saisis TTC.
+// Réglage Shopify > Taxes : « Tous les prix incluent les taxes ».
+// true  : les prix Shopify sont TTC, le site en déduit le HT.
+// false : les prix Shopify sont HT et Shopify ajoute la TVA au paiement.
+export const SHOPIFY_PRICES_INCLUDE_TAX = true;
+
 export const VAT_FOOD = 0.055;
 export const VAT_STANDARD = 0.2;
 
@@ -32,9 +36,18 @@ export function vatRateFor(product: { productType: string; title: string; isGift
   return VAT_FOOD;
 }
 
-export function amountHT(amountTTC: number, vatRate: number): number {
-  return amountTTC / (1 + vatRate);
+/** Prix HT d'un montant Shopify. */
+export function amountHT(shopifyAmount: number, vatRate: number): number {
+  return SHOPIFY_PRICES_INCLUDE_TAX ? shopifyAmount / (1 + vatRate) : shopifyAmount;
 }
+
+/** Prix TTC d'un montant Shopify. */
+export function amountTTC(shopifyAmount: number, vatRate: number): number {
+  return SHOPIFY_PRICES_INCLUDE_TAX ? shopifyAmount : shopifyAmount * (1 + vatRate);
+}
+
+/** Unité des montants comparés par Shopify (seuil de livraison offerte). */
+export const SHOPIFY_AMOUNT_UNIT = SHOPIFY_PRICES_INCLUDE_TAX ? "TTC" : "HT";
 
 export type Dosage = { gramsPerCup: number; cupMl: number };
 
@@ -61,9 +74,9 @@ export function parseDosage(description: string): Dosage | null {
   return { gramsPerCup: (gramsPerLitre * TEA_CUP_ML) / 1000, cupMl: TEA_CUP_ML };
 }
 
-export function costPerCup(priceTTC: number, weightKg: number, dosage: Dosage) {
+export function costPerCup(shopifyAmount: number, weightKg: number, dosage: Dosage) {
   const cups = (weightKg * 1000) / dosage.gramsPerCup;
-  return { cups, perCup: priceTTC / cups, cupMl: dosage.cupMl };
+  return { cups, perCup: shopifyAmount / cups, cupMl: dosage.cupMl };
 }
 
 export type CompanyInfo = { name: string; siret: string; vatNumber: string };
