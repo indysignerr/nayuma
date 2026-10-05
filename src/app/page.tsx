@@ -2,6 +2,7 @@ import { Hero } from "@/components/sections/hero";
 import { QuizTeaser } from "@/components/sections/quiz-teaser";
 import { FineTeaSection } from "@/components/sections/fine-tea-section";
 import { FeaturedProducts } from "@/components/sections/featured-products";
+import { BombayDelightPromo } from "@/components/sections/bombay-delight-promo";
 import { UniversesBand } from "@/components/sections/universes-band";
 import { EditorialGuide } from "@/components/sections/editorial-guide";
 import { JournalTeaser } from "@/components/sections/journal-teaser";
@@ -14,9 +15,10 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <FeaturedProducts />
+      <BombayDelightPromo />
       <QuizTeaser />
       <FineTeaSection />
-      <FeaturedProducts />
       <UniversesBand />
       <EditorialGuide />
       <JournalTeaser />

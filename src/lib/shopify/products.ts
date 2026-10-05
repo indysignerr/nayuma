@@ -177,3 +177,62 @@ export async function getRelatedProducts(product: Product, limit = 4): Promise<P
     )
     .slice(0, limit);
 }
+
+function normalizeText(value: string): string {
+  return value.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+}
+
+const CHRISTMAS_PATTERN = /\bno[eë]l\b/i;
+// Saveurs de fêtes, pour compléter la sélection tant que la collection Noël est peu fournie.
+// Une saveur d'hiver est obligatoire ; pomme et orange ne font qu'affiner le classement.
+const WINTER_FLAVORS = [/can+el+e/, /epice/, /speculo/, /marron/, /amande/, /caramel/, /vanille/, /chocolat|cacao/, /noisette/, /nougat/];
+const SIDE_FLAVORS = [/pomme/, /orange/];
+
+function festiveScore(product: Product): number {
+  // Le titre d'abord : les descriptions citent souvent des saveurs en passant.
+  const title = normalizeText(product.title);
+  const text = normalizeText(`${product.title} ${product.description}`);
+  const winterInTitle = WINTER_FLAVORS.filter((f) => f.test(title)).length;
+  const winter = WINTER_FLAVORS.filter((f) => f.test(text)).length;
+  if (winter === 0) return 0;
+  return winterInTitle * 3 + winter + SIDE_FLAVORS.filter((f) => f.test(text)).length;
+}
+
+/** Produits de Noël : collections dont le nom contient « Noël » ou titre mentionnant Noël. */
+export async function getChristmasProducts(): Promise<Product[]> {
+  const products = await getAllProducts();
+  return products
+    .filter(
+      (p) =>
+        !p.isGiftCard &&
+        (p.collectionHandles.some((h) => CHRISTMAS_PATTERN.test(h.replace(/-/g, " "))) || CHRISTMAS_PATTERN.test(p.title))
+    )
+    .sort((a, b) => Number(b.vatRate === 0.055) - Number(a.vatRate === 0.055));
+}
+
+/** Thés et infusions aux saveurs de fêtes (les plus gourmands d'abord), hors produits de Noël. */
+export async function getFestiveProducts(exclude: Product[] = [], limit = 12): Promise<Product[]> {
+  const products = await getAllProducts();
+  const excluded = new Set(exclude.map((p) => p.handle));
+  return products
+    .filter(
+      (p) =>
+        !excluded.has(p.handle) &&
+        p.vatRate === 0.055 &&
+        p.images.length > 0 &&
+        !/glac/i.test(normalizeText(`${p.productType} ${p.title}`))
+    )
+    .map((p) => ({ product: p, score: festiveScore(p) }))
+    .filter(({ score }) => score >= 3)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map(({ product }) => product);
+}
+
+/** Sélection de Noël complétée par des saveurs de fêtes. */
+export async function getChristmasSelection(limit: number): Promise<Product[]> {
+  const christmas = (await getChristmasProducts()).filter((p) => p.images.length > 0);
+  if (christmas.length >= limit) return christmas.slice(0, limit);
+  const festive = await getFestiveProducts(christmas, limit);
+  return [...christmas, ...festive].slice(0, limit);
+}

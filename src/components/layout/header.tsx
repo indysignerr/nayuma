@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, Phone, Search, User, ShoppingBag } from "lucide-react";
+import { Menu, Phone, Search, Snowflake, User, ShoppingBag } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { AnnouncementBar } from "./announcement-bar";
 import { MegaMenu } from "./mega-menu";
@@ -70,6 +70,19 @@ export function Header({ products }: { products: ProductPreview[] }) {
             >
               <Search className="size-5" />
             </button>
+            <Link
+              href="/thes-de-noel"
+              className="lg:hidden size-11 flex items-center justify-center text-terracotta"
+              aria-label="Thés de Noël"
+            >
+              <Snowflake className="size-5" />
+            </Link>
+            <Link
+              href="/thes-de-noel"
+              className="hidden lg:inline-flex min-h-11 items-center gap-2 ml-2 rounded-sm bg-terracotta px-4 text-sm font-medium text-cream hover:bg-ink transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-dark"
+            >
+              <Snowflake className="size-4" aria-hidden /> Thés de Noël
+            </Link>
           </div>
 
           <Link href="/" className="flex justify-center text-ink" aria-label="NAYUMA — Tea & Mood">

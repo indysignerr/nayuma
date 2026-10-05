@@ -34,7 +34,7 @@ const COLUMNS = [
       { label: "Journal du thé", href: "/journal" },
       { label: "Soins capillaires — RACINE", href: "/collections/soins-capillaires-au-the" },
       { label: "Collection Ayurveda", href: "/collections/collection-ayrveda-en-vrac" },
-      { label: "Thés de Noël", href: "/collections/thes-de-noel-en-vrac" },
+      { label: "Thés de Noël", href: "/thes-de-noel" },
       { label: "Engagement bio & traçabilité", href: "/engagement" },
     ],
   },

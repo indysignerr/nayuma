@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { NAV_ITEMS } from "@/lib/nav-config";
-import { Phone, Sparkles } from "lucide-react";
+import { Phone, Snowflake, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function MobileNav({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
@@ -23,6 +23,13 @@ export function MobileNav({ open, onOpenChange }: { open: boolean; onOpenChange:
             >
               <span className="text-sm font-medium uppercase tracking-wider">Espace professionnels</span>
               <span className="text-xs text-orange">Payez à 60 jours</span>
+            </Link>
+            <Link
+              href="/thes-de-noel"
+              onClick={() => onOpenChange(false)}
+              className="flex items-center justify-center gap-2 min-h-11 rounded-sm bg-terracotta px-4 text-sm font-medium text-cream"
+            >
+              <Snowflake className="size-4" aria-hidden /> Thés de Noël
             </Link>
             <Link
               href="/quiz"

@@ -1,12 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Snowflake } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getAllProducts } from "@/lib/shopify/products";
+import { getChristmasSelection } from "@/lib/shopify/products";
 import { sizedImageUrl } from "@/lib/shopify/format";
-import { VAT_FOOD, variantWeightKg } from "@/lib/b2b";
 import { ACCENT_BG, categoryLabel } from "@/lib/accent";
 import { cn } from "@/lib/utils";
-import type { Product } from "@/lib/shopify/types";
 
 // Mosaïque 3×3 sans chevauchement : une grande photo (2×2), deux à droite, deux en bas, une tuile de marque.
 const TILE_LAYOUT = [
@@ -23,40 +22,33 @@ function shortTitle(title: string): string {
 }
 
 export async function Hero() {
-  const products = await getAllProducts();
-  // Uniquement des thés et infusions (pas de coffrets, accessoires ni cartes cadeaux).
-  const teas = products.filter((p) => p.images[0] && p.vatRate === VAT_FOOD);
-  const seenTypes = new Set<string>();
-  const picks: Product[] = [];
-  for (const p of teas) {
-    if (seenTypes.has(p.productType)) continue;
-    seenTypes.add(p.productType);
-    picks.push(p);
-    if (picks.length === TILE_LAYOUT.length) break;
-  }
-  const collage = picks.length === TILE_LAYOUT.length ? picks : teas.slice(0, TILE_LAYOUT.length);
-  const references = products.filter((p) => p.variants.some((v) => variantWeightKg(v.title) === 1)).length;
+  const collage = await getChristmasSelection(TILE_LAYOUT.length);
 
   return (
     <section className="relative overflow-hidden mesh-gradient grain-overlay border-b border-cream-line">
       <div className="mx-auto max-w-[1240px] px-6 py-20 md:py-28 grid md:grid-cols-2 gap-12 items-center">
         <div className="relative z-[2]">
-          <p className="text-xs uppercase tracking-[0.25em] text-gold-dark mb-5">NAYUMA — Tea &amp; Mood</p>
+          <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-terracotta mb-5">
+            <Snowflake className="size-4" aria-hidden /> Collection de Noël
+          </p>
           <h1 className="font-display text-5xl md:text-6xl leading-[1.05] mb-6">
-            L&apos;art du thé,
+            Les thés de Noël
             <br />
-            réinventé pour vos <em className="not-italic text-gold-dark">humeurs</em>
+            <em className="not-italic text-gold-dark">sont arrivés</em>
           </h1>
           <p className="text-base text-ink-soft max-w-md leading-relaxed mb-8">
-            Thés, rooibos, matcha et infusions d&apos;exception, sélectionnés avec exigence pour accompagner chaque
-            instant — du réveil à la nuit tombée.
+            Pomme, cannelle, amande, spéculoos, caramel : nos thés et infusions aux saveurs de fêtes, à servir tout
+            l&apos;hiver dans votre établissement ou à offrir.
           </p>
           <div className="flex flex-wrap items-center gap-4">
-            <Button asChild size="lg" className="rounded-sm px-8">
-              <Link href="/collections/thes-verts-althea">Explorer les thés</Link>
+            <Button asChild size="lg" className="rounded-sm px-8 min-h-11">
+              <Link href="/thes-de-noel">Découvrir les thés de Noël</Link>
             </Button>
-            <Link href="/fine-tea" className="text-sm underline underline-offset-4 text-gold-dark hover:text-ink transition-colors">
-              Découvrir FINE TEA
+            <Link
+              href="/collections/thes"
+              className="inline-flex min-h-11 items-center text-sm underline underline-offset-4 text-gold-dark hover:text-ink transition-colors"
+            >
+              Toute la gamme
             </Link>
           </div>
         </div>
@@ -115,16 +107,17 @@ export async function Hero() {
                 );
               })}
 
-              <div
-                className="col-start-3 row-start-3 flex flex-col justify-between rounded-sm bg-ink p-3 md:p-4 text-cream opacity-0 animate-fade-up"
+              <Link
+                href="/thes-de-noel"
+                className="col-start-3 row-start-3 flex flex-col justify-between rounded-sm bg-terracotta p-3 md:p-4 text-cream opacity-0 animate-fade-up hover:bg-ink transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-dark"
                 style={{ animationDelay: `${120 + TILE_LAYOUT.length * 90}ms` }}
               >
-                <span className="text-[10px] uppercase tracking-[0.2em] text-gold-light">En vrac</span>
-                <p>
-                  <span className="block font-display text-2xl md:text-4xl leading-none">{references}</span>
-                  <span className="text-[11px] md:text-xs text-cream/70 leading-tight">références au kilo</span>
-                </p>
-              </div>
+                <Snowflake className="size-5 text-gold-light" aria-hidden />
+                <span>
+                  <span className="block font-display text-xl md:text-2xl leading-none">Noël</span>
+                  <span className="text-[11px] md:text-xs text-cream/80 leading-tight">Voir la collection →</span>
+                </span>
+              </Link>
             </div>
           </div>
         )}
