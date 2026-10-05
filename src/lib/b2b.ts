@@ -23,7 +23,7 @@ export function isB2BVariant(title: string): boolean {
 // Réglage Shopify > Taxes : « Tous les prix incluent les taxes ».
 // true  : les prix Shopify sont TTC, le site en déduit le HT.
 // false : les prix Shopify sont HT et Shopify ajoute la TVA au paiement.
-export const SHOPIFY_PRICES_INCLUDE_TAX = true;
+export const SHOPIFY_PRICES_INCLUDE_TAX = false;
 
 export const VAT_FOOD = 0.055;
 export const VAT_STANDARD = 0.2;
