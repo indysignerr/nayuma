@@ -38,6 +38,8 @@ const PRODUCTS_QUERY = `
                 id
                 title
                 availableForSale
+                weight
+                weightUnit
                 price { amount currencyCode }
                 compareAtPrice { amount currencyCode }
                 selectedOptions { name value }
@@ -72,6 +74,8 @@ type RawProductNode = {
         id: string;
         title: string;
         availableForSale: boolean;
+        weight: number | null;
+        weightUnit: string | null;
         price: { amount: string; currencyCode: string };
         compareAtPrice: { amount: string; currencyCode: string } | null;
         selectedOptions: { name: string; value: string }[];
@@ -88,6 +92,17 @@ type RawProductNode = {
 function priceBounds(variants: RawProductNode["variants"]["edges"]) {
   const sorted = [...variants].sort((a, b) => Number(a.node.price.amount) - Number(b.node.price.amount));
   return { min: sorted[0].node.price, max: sorted[sorted.length - 1].node.price };
+}
+
+const KG_PER_UNIT: Record<string, number> = { KILOGRAMS: 1, GRAMS: 0.001, POUNDS: 0.4536, OUNCES: 0.02835 };
+
+/** Variante unique sans nom (« Default Title ») : on la nomme d'après son poids Shopify, comme les autres pochettes. */
+function variantTitle(variant: RawProductNode["variants"]["edges"][number]["node"]): string {
+  if (variant.title !== "Default Title" || !variant.weight || !variant.weightUnit) return variant.title;
+  const kg = variant.weight * (KG_PER_UNIT[variant.weightUnit] ?? 0);
+  if (Math.abs(kg - 1) < 0.01) return "Pochette Vrac 1kg";
+  if (kg > 0 && kg < 1) return `Pochette Vrac ${Math.round(kg * 1000)}g`;
+  return variant.title;
 }
 
 function mapProduct(node: RawProductNode): Product {
@@ -111,7 +126,7 @@ function mapProduct(node: RawProductNode): Product {
     images: node.images.edges.map((e) => e.node),
     variants: variants.map((e) => ({
       id: e.node.id,
-      title: e.node.title,
+      title: variantTitle(e.node),
       price: e.node.price,
       compareAtPrice: e.node.compareAtPrice,
       availableForSale: e.node.availableForSale,
@@ -182,7 +197,14 @@ function normalizeText(value: string): string {
   return value.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }
 
-const CHRISTMAS_PATTERN = /\bno[eë]l\b/i;
+// Thés de Noël mis en avant, par numéro de fiche (titre « N°25 … »), dans l'ordre d'affichage.
+const CHRISTMAS_NUMBERS = [...Array.from({ length: 15 }, (_, i) => 25 + i), 414];
+
+function teaNumber(title: string): number | null {
+  const match = title.match(/^N°\s*(\d+)/i);
+  return match ? Number(match[1]) : null;
+}
+
 // Saveurs de fêtes, pour compléter la sélection tant que la collection Noël est peu fournie.
 // Une saveur d'hiver est obligatoire ; pomme et orange ne font qu'affiner le classement.
 const WINTER_FLAVORS = [/can+el+e/, /epice/, /speculo/, /marron/, /amande/, /caramel/, /vanille/, /chocolat|cacao/, /noisette/, /nougat/];
@@ -198,16 +220,15 @@ function festiveScore(product: Product): number {
   return winterInTitle * 3 + winter + SIDE_FLAVORS.filter((f) => f.test(text)).length;
 }
 
-/** Produits de Noël : collections dont le nom contient « Noël » ou titre mentionnant Noël. */
+/** Thés de Noël mis en avant (N°25 à 39 et N°414), dans l'ordre de la liste. */
 export async function getChristmasProducts(): Promise<Product[]> {
   const products = await getAllProducts();
-  return products
-    .filter(
-      (p) =>
-        !p.isGiftCard &&
-        (p.collectionHandles.some((h) => CHRISTMAS_PATTERN.test(h.replace(/-/g, " "))) || CHRISTMAS_PATTERN.test(p.title))
-    )
-    .sort((a, b) => Number(b.vatRate === 0.055) - Number(a.vatRate === 0.055));
+  const byNumber = new Map<number, Product>();
+  for (const p of products) {
+    const n = teaNumber(p.title);
+    if (n !== null && CHRISTMAS_NUMBERS.includes(n) && !byNumber.has(n)) byNumber.set(n, p);
+  }
+  return CHRISTMAS_NUMBERS.flatMap((n) => byNumber.get(n) ?? []);
 }
 
 /** Thés et infusions aux saveurs de fêtes (les plus gourmands d'abord), hors produits de Noël. */
