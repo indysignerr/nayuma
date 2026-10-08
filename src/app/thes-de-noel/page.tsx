@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Snowflake } from "lucide-react";
 import { getChristmasProducts, getFestiveProducts } from "@/lib/shopify/products";
 import { ProductCard } from "@/components/ui/product-card";
@@ -16,16 +17,25 @@ export default async function ThesDeNoelPage() {
 
   return (
     <main>
-      <section className="relative overflow-hidden border-b border-cream-line mesh-gradient grain-overlay">
-        <div className="relative z-[2] mx-auto max-w-[1240px] px-6 py-16 md:py-24 max-w-3xl md:max-w-[1240px]">
+      <section className="relative isolate overflow-hidden bg-ink text-cream">
+        <Image
+          src="/images/promo/noel-banner.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="-z-10 object-cover object-[70%_center]"
+        />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/95 via-ink/75 via-40% to-ink/0 to-75%" />
+        <div className="mx-auto max-w-[1240px] px-6 py-20 md:py-28">
           <ScrollReveal className="max-w-2xl">
-            <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-terracotta mb-4">
+            <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-gold-light mb-4">
               <Snowflake className="size-4" aria-hidden /> Collection de Noël
             </p>
             <h1 className="font-display text-5xl md:text-7xl leading-[0.95] mb-6">
-              Les thés <em className="text-gold-dark">de Noël</em>
+              Les thés <em className="text-gold-light">de Noël</em>
             </h1>
-            <p className="text-base md:text-lg text-ink-soft leading-relaxed">
+            <p className="text-base md:text-lg text-cream/85 leading-relaxed">
               Pomme, cannelle, amande, spéculoos, caramel : des recettes réconfortantes pour la saison des fêtes, à
               servir tout l&apos;hiver ou à offrir.
             </p>

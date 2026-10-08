@@ -33,7 +33,7 @@ export function BombayDelightPromo() {
   );
 
   return (
-    <section className="mx-auto max-w-[1240px] px-6 pb-16 md:pb-20" aria-labelledby="bombay-heading">
+    <section className="mx-auto max-w-[1240px] px-6 py-16 md:py-20" aria-labelledby="bombay-heading">
       <ScrollReveal>
         <h2 id="bombay-heading" className="sr-only">
           Nouvelle gamme Bombay Delight par NAYUMA : sirops Chai et Matcha
