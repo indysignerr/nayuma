@@ -34,7 +34,7 @@ const CHANNELS: Channel[] = [
     icon: Handshake,
     title: "Commander directement chez NAYUMA",
     desc: "Pour bénéficier de nos conditions professionnelles et d'un accompagnement personnalisé.",
-    points: ["Tarifs professionnels, prix affichés HT", "Relation directe avec notre équipe", "Commandes importantes et réassort", "Conseil personnalisé, devis et échantillons"],
+    points: ["Tarifs professionnels, prix affichés HT", "Relation directe avec notre équipe", "Commandes importantes et réassort", "Conseil personnalisé et devis"],
     cta: "Accéder à notre espace professionnel",
     href: DIRECT_ORDER_PATH,
     external: false,

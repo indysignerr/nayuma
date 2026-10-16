@@ -26,7 +26,7 @@ import { DevisForm } from "@/components/b2b/devis-form";
 export const metadata: Metadata = {
   title: "Commander directement — Espace professionnels",
   description:
-    "Commandez NAYUMA en direct : thés, rooibos, infusions et chai latte en pochettes de 1 kg, prix HT, facture à votre société, conseil personnalisé, devis et échantillons sur demande.",
+    "Commandez NAYUMA en direct : thés, rooibos, infusions et chai latte en pochettes de 1 kg, prix HT, facture à votre société, conseil personnalisé et devis sur demande.",
 };
 
 const AUDIENCES = [
@@ -101,7 +101,7 @@ const STEPS = [
   },
   {
     title: "Un besoin particulier ?",
-    desc: "Volumes réguliers, sélection sur mesure ou échantillons pour tester : demandez un devis, nous répondons sous 24h ouvrées.",
+    desc: "Volumes réguliers ou sélection sur mesure : demandez un devis, nous répondons sous 24h ouvrées.",
   },
 ];
 
@@ -228,11 +228,11 @@ export default async function CommandeDirectePage() {
         <span id="devis-faire" className="block scroll-mt-44" aria-hidden />
         <div className="mx-auto max-w-[1240px] px-6 py-20 md:py-28 grid gap-12 md:grid-cols-[1fr_1.4fr]">
           <ScrollReveal>
-            <p className="text-xs uppercase tracking-[0.25em] text-gold-dark mb-4">Devis & échantillons</p>
+            <p className="text-xs uppercase tracking-[0.25em] text-gold-dark mb-4">Devis</p>
             <h2 className="font-display text-4xl md:text-5xl leading-tight mb-6">Parlons de votre sélection.</h2>
             <p className="text-sm text-ink-soft leading-relaxed mb-8 max-w-sm">
-              Volumes réguliers, sélection sur mesure ou échantillons pour tester avant de vous lancer : décrivez votre
-              besoin, nous vous répondons sous 24h ouvrées.
+              Volumes réguliers ou sélection sur mesure : décrivez votre besoin, nous vous répondons sous 24h
+              ouvrées.
             </p>
             <ul className="flex flex-col gap-3 text-sm">
               <li className="flex items-center gap-3">

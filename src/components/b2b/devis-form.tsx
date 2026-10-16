@@ -18,7 +18,7 @@ const ACTIVITIES = [
 ];
 
 const FAIRE_REQUEST = "Commander via Faire (recevoir le lien Faire Direct)";
-const REQUESTS = ["Demande de devis", "Demande d'échantillons", FAIRE_REQUEST, "Autre question"];
+const REQUESTS = ["Demande de devis", FAIRE_REQUEST, "Autre question"];
 
 const fieldClass =
   "w-full rounded-sm border border-cream-line bg-cream px-3 text-sm outline-none transition-colors placeholder:text-ink-soft/60 focus-visible:border-ink focus-visible:ring-2 focus-visible:ring-gold/40";
